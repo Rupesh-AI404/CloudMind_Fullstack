@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Mind</title>
+    <meta name="description" content="Transform your business with comprehensive digital marketing solutions. Drive growth, increase visibility, and connect with your audience like never before.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <!-- Logo -->
+                <img src="/images/logoF.png" th:src="@{/images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
+            </a>
+            
+            <div class="d-flex align-items-center order-lg-3">
+                <!-- Theme Toggle -->
+                <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="bi bi-sun-fill" id="lightIcon"></i>
+                    <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
+                </button>
+
+
+                
+                <!-- CTA Button -->
+                <a th:href="@{/subscription}" class="btn btn-gradient d-none d-lg-inline-flex me-3">
+                    Get Started
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/about}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/services}">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/pricing}">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/contact}">Contact</a>
+                    </li>
+                </ul>
+                
+                <!-- Mobile CTA -->
+                <div class="d-lg-none mt-3">
+                    <a th:href="@{/subscription}" class="btn btn-gradient w-100">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        <div class="container">
+            <div class="row align-items-center py-5">
+                <div class="col-lg-6">
+                    <div class="hero-badge mb-4">
+                        <i class="bi bi-stars me-2"></i>
+                        <span>Digital Marketing Excellence</span>
+                    </div>
+                    <h1 class="hero-title mb-4">
+                        Transform Your Business with 
+                        <span class="gradient-text">Cloud Mind</span> 
+                    </h1>
+                    <p class="hero-description mb-4">
+                        Leverage proven digital marketing strategies to accelerate growth, boost visibility, 
+                        and connect with your audience through innovative campaigns.<br> Transform your brand's online presence today.
+                    </p>
+
+                    <!-- Stats -->
+                    <div class="row g-4 mb-5">
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">ROI Increase</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <div class="stat-number">10K+</div>
+                                <div class="stat-label">Happy Clients</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <div class="stat-number">99%</div>
+                                <div class="stat-label">Satisfaction</div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <!-- CTA Buttons -->
+                    <div class="d-flex flex-column flex-sm-row gap-3">
+                        <a href="/services" class="btn btn-gradient btn-lg">
+                            Start Your Journey
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                        <a href="/contact" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-play-circle me-2"></i>
+                            Book Free Demo
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="hero-visual">
+                        <div class="hero-card glass-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0 fw-bold">Marketing Dashboard</h6>
+                                <span class="badge bg-success">Live</span>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-6 text-center">
+                                    <div class="metric-label">Conversion Rate</div>
+                                    <div class="metric-value">287%</div>
+                                    <div class="metric-trend text-success">
+                                        <i class="bi bi-arrow-up"></i> +42%
+                                    </div>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <div class="metric-label">Lead Generation</div>
+                                    <div class="metric-value">15.2K</div>
+                                    <div class="metric-trend text-success">
+                                        <i class="bi bi-arrow-up"></i> +68%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container d-flex align-items-end justify-content-center gap-2">
+                                <div class="chart-bar" style="height: 20%"></div>
+                                <div class="chart-bar" style="height: 45%"></div>
+                                <div class="chart-bar" style="height: 80%"></div>
+                                <div class="chart-bar" style="height: 60%"></div>
+                                <div class="chart-bar" style="height: 95%"></div>
+                                <div class="chart-bar" style="height: 75%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating Cards -->
+                        <div class="floating-card floating-card-1 glass-card p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon me-2">🚀</div>
+                                <div>
+                                    <div class="card-title">Campaign Optimization</div>
+                                    <div class="card-subtitle">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="floating-card floating-card-2 glass-card p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon me-2">📈</div>
+                                <div>
+                                    <div class="card-title">Performance</div>
+                                    <div class="card-subtitle">+287% Growth</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="floating-card floating-card-3 glass-card p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon me-2">⚡</div>
+                                <div>
+                                    <div class="card-title">Real-time</div>
+                                    <div class="card-subtitle">Analytics</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-badge mb-3">
+                    <i class="bi bi-bullseye me-2"></i>
+                    <span>Our Core Services</span>
+                </div>
+                <h2 class="display-4 fw-bold mb-3">
+                    Comprehensive Digital Marketing <span class="gradient-text">Solutions</span>
+                </h2>
+                <p class="lead text-muted">
+                    Strategic digital marketing services combined with data-driven insights to deliver exceptional results
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-layers"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Content Marketing</h5>
+                        <p class="text-muted">
+                            Create compelling, personalized content at scale with strategic content planning that resonates with your brand voice.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Data Analytics</h5>
+                        <p class="text-muted">
+                            Forecast market trends and customer behavior with comprehensive analytics that turn data into actionable insights.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-crosshair"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Audience Targeting</h5>
+                        <p class="text-muted">
+                            Maximize ROI with precision audience segmentation and strategic optimization across all digital platforms.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Social Media Marketing</h5>
+                        <p class="text-muted">
+                            Build engaging social media presence that provides consistent brand messaging and drives conversions effectively.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Search Engine Optimization</h5>
+                        <p class="text-muted">
+                            Dominate search rankings with proven SEO strategies that adapt to search engine updates effectively.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-bar-chart"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Campaign Optimization</h5>
+                        <p class="text-muted">
+                            Continuously improve results with data-driven insights that analyze every interaction and optimize strategically.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="display-5 fw-bold mb-4">
+                        Why Choose <span class="gradient-text">Cloud Mind?</span>
+                    </h2>
+                    <p class="lead mb-4">
+                        We don't just run campaigns – we build comprehensive digital strategies 
+                        that drive real business results. Our data-driven approach ensures 
+                        every dollar spent delivers maximum impact.
+                    </p>
+                    
+                    <div class="row g-4">
+                        <div class="col-sm-6">
+                            <div class="feature-item">
+                                <div class="feature-icon-small mb-2">
+                                    <i class="bi bi-trophy text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Proven Results</h6>
+                                <p class="text-muted small">300% average ROI across all client campaigns</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-item">
+                                <div class="feature-icon-small mb-2">
+                                    <i class="bi bi-people text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Expert Team</h6>
+                                <p class="text-muted small">Certified professionals with 10+ years experience</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-item">
+                                <div class="feature-icon-small mb-2">
+                                    <i class="bi bi-gear text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Custom Strategies</h6>
+                                <p class="text-muted small">Tailored solutions for your unique business goals</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="feature-item">
+                                <div class="feature-icon-small mb-2">
+                                    <i class="bi bi-graph-up text-primary"></i>
+                                </div>
+                                <h6 class="fw-bold">Transparent Reporting</h6>
+                                <p class="text-muted small">Real-time dashboards and detailed monthly reports</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Digital marketing analytics" 
+                             class="img-fluid rounded-3 shadow-lg">
+                        <div class="position-absolute bottom-0 start-0 translate-middle-y ms-n3">
+                            <div class="glass-card p-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success rounded-circle p-2 me-3">
+                                        <i class="bi bi-bar-chart text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="h4 mb-0 fw-bold">+287%</div>
+                                        <small class="text-muted">Growth Rate</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section 
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">
+                    What Our <span class="gradient-text">Clients Say</span>
+                </h2>
+                <p class="lead text-muted">Real results from real businesses</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial-card glass-card h-100 p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <blockquote class="mb-4">
+                            "DigitalBoost transformed our online presence completely. Our lead generation increased by 300% in just 6 months!"
+                        </blockquote>
+                        <div class="d-flex align-items-center">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b5e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                 alt="Sarah Johnson" 
+                                 class="rounded-circle me-3" 
+                                 width="50" 
+                                 height="50">
+                            <div>
+                                <div class="fw-bold">Sarah Johnson</div>
+                                <small class="text-muted">TechStart Inc.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card glass-card h-100 p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <blockquote class="mb-4">
+                            "The team's expertise in PPC advertising helped us achieve a 5x return on ad spend. Highly recommended!"
+                        </blockquote>
+                        <div class="d-flex align-items-center">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                 alt="Michael Chen" 
+                                 class="rounded-circle me-3" 
+                                 width="50" 
+                                 height="50">
+                            <div>
+                                <div class="fw-bold">Michael Chen</div>
+                                <small class="text-muted">GrowthCorp</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card glass-card h-100 p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <blockquote class="mb-4">
+                            "Professional, results-driven, and always exceeding expectations. Our best marketing investment ever."
+                        </blockquote>
+                        <div class="d-flex align-items-center">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                 alt="Emily Rodriguez" 
+                                 class="rounded-circle me-3" 
+                                 width="50" 
+                                 height="50">
+                            <div>
+                                <div class="fw-bold">Emily Rodriguez</div>
+                                <small class="text-muted">EcoSolutions</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-badge mb-3">
+                    <i class="bi bi-currency-dollar me-2"></i>
+                    <span>Pricing Plans</span>
+                </div>
+                <h2 class="display-4 fw-bold mb-3">
+                    Choose Your <span class="gradient-text">Plan</span>
+                </h2>
+                <p class="lead text-muted">
+                    Flexible pricing options designed to scale with your business
+                </p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card glass-card h-100 p-4">
+                        <div class="text-center mb-4">
+                            <h5 class="fw-bold">Starter</h5>
+                            <p class="text-muted">Perfect for small businesses</p>
+                            <div class="display-4 fw-bold text-primary">$999</div>
+                            <small class="text-muted">/month</small>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Basic SEO optimization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Social media management (2 platforms)</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Monthly content calendar</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Basic analytics reporting</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Email support</li>
+                        </ul>
+                        <a th:href="@{contact}" class="btn btn-outline-primary w-100">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card pricing-card-featured glass-card h-100 p-4 position-relative">
+                        <div class="position-absolute top-0 start-50 translate-middle">
+                            <span class="badge bg-gradient-primary">Most Popular</span>
+                        </div>
+                        <div class="text-center mb-4">
+                            <h5 class="fw-bold">Professional</h5>
+                            <p class="text-muted">Ideal for growing businesses</p>
+                            <div class="display-4 fw-bold text-primary">$2,499</div>
+                            <small class="text-muted">/month</small>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Advanced SEO optimization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Social media management (5 platforms)</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Content creation & strategy</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>PPC campaign management</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Email marketing automation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Advanced analytics & reporting</li>
+                        </ul>
+                        <a th:href="@{/contact}" class="btn btn-gradient w-100">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card glass-card h-100 p-4">
+                        <div class="text-center mb-4">
+                            <h5 class="fw-bold">Enterprise</h5>
+                            <p class="text-muted">For large businesses</p>
+                            <div class="display-4 fw-bold text-primary">$4,999</div>
+                            <small class="text-muted">/month</small>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Comprehensive SEO strategy</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Multi-platform social media</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Custom content production</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Advanced PPC & display ads</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Marketing automation suite</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Dedicated account manager</li>
+                        </ul>
+                        <a th:href="@{contact}" class="btn btn-outline-primary w-100" >Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-badge mb-3">
+                    <i class="bi bi-telephone me-2"></i>
+                    <span>Contact Us</span>
+                </div>
+                <h2 class="display-4 fw-bold mb-3">
+                    Get In <span class="gradient-text">Touch</span>
+                </h2>
+                <p class="lead text-muted">
+                    Ready to transform your digital presence? Let's discuss how we can help your business grow.
+                </p>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-lg-6">
+                    <div class="glass-card p-4 h-100">
+                        <h5 class="fw-bold mb-4">Contact Information</h5>
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon me-3">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Email</h6>
+                                    <p class="text-muted mb-0">cloudmind@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon me-3">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Phone</h6>
+                                    <p class="text-muted mb-0">+977 9863038840</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon me-3">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Address</h6>
+                                    <p class="text-muted mb-0">Lalitpur, Nepal</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="glass-card p-3 mt-4">
+                            <h6 class="fw-bold mb-3">Office Hours</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Monday - Friday</span>
+                                <span>9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Saturday</span>
+                                <span>10:00 AM - 4:00 PM</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Sunday</span>
+                                <span>Closed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="glass-card p-4">
+                        <h5 class="fw-bold mb-4">Send us a Message</h5>
+                        <form id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="phone">
+                                </div>
+                                <div class="col-12">
+                                    <label for="company" class="form-label">Company</label>
+                                    <input type="text" class="form-control" id="company">
+                                </div>
+                                <div class="col-12">
+                                    <label for="service" class="form-label">Service Interest</label>
+                                    <select class="form-select" id="service" required>
+                                        <option value="">Select a service</option>
+                                        <option value="seo">SEO Optimization</option>
+                                        <option value="social-media">Social Media Marketing</option>
+                                        <option value="content">Content Marketing</option>
+                                        <option value="email">Email Marketing</option>
+                                        <option value="ppc">PPC Advertising</option>
+                                        <option value="analytics">Analytics & Reporting</option>
+                                        <option value="all">All Services</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" rows="4" placeholder="Tell us about your project and goals..." required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-gradient w-100">Send Message</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section py-5">
+        <div class="cta-background">
+            <div class="gradient-orb orb-cta-1"></div>
+            <div class="gradient-orb orb-cta-2"></div>
+        </div>
+        <div class="container text-center position-relative">
+            <div class="section-badge mb-3">
+                <i class="bi bi-rocket me-2"></i>
+                <span>Ready to Transform?</span>
+            </div>
+            <h2 class="display-4 fw-bold text-white mb-3">Start Your Digital Marketing Journey Today</h2>
+            <p class="lead text-white-50 mb-4">
+                Join thousands of forward-thinking businesses that have embraced comprehensive digital marketing strategies
+            </p>
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                <a th:href="@{subscription}" class="btn btn-light btn-lg">
+                    Get Started Now
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                <a href="#contact" class="btn btn-outline-light btn-lg">
+                    Book Consultation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-modern py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4 gx-5">
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">SERVICES</h6>
+                    <ul class="footer-list">
+                        <li><a th:href="@{/services}">AI Content Generation</a></li>
+                        <li><a th:href="@{/services}">Predictive Analytics</a></li>
+                        <li><a th:href="@{/services}">Smart Targeting</a></li>
+                        <li><a th:href="@{/services}">Conversational AI</a></li>
+                        <li><a th:href="@{/services}">SEO Optimization</a></li>
+                        <li><a th:href="@{/services}">Performance Optimization</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">COMPANY</h6>
+                    <ul class="footer-list">
+                        <li><a th:href="@{/about}">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a th:href="@{/contact}">Contact</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">RESOURCES</h6>
+                    <ul class="footer-list">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Guides</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h6 class="footer-heading">GUIDES</h6>
+                    <ul class="footer-list">
+                        <li><a href="#">Digital Marketing Guide</a></li>
+                        <li><a href="#">SEO Best Practices</a></li>
+                        <li><a href="#">Content Strategy</a></li>
+                        <li><a href="#">Analytics & Reporting</a></li>
+                        <li><a href="#">Automation Tools</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <h6 class="footer-heading">FOLLOW US</h6>
+                    <div class="footer-social d-flex gap-3 mt-2">
+                        <a href="#" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-divider my-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div class="footer-copyright mb-2 mb-md-0">
+                    &copy; 2025 Cloud Mind Agency. All rights reserved.
+                </div>
+                <div class="footer-legal">
+                    <a href="#" class="me-3">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

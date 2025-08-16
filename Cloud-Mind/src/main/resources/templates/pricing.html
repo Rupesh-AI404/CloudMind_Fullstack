@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Cloud Mind</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img src="/Images/logoF.png" th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
+            </a>
+            
+            <div class="d-flex align-items-center order-lg-3">
+                <!-- Theme Toggle -->
+                <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="bi bi-sun-fill" id="lightIcon"></i>
+                    <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
+                </button>
+                
+                <!-- CTA Button -->
+                <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>
+                <a th:href="@{/signup}" class="btn btn-primary me-3">Signup</a>
+                
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/about}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/services}">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/pricing}">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/contact}">Contact</a>
+                    </li>
+                </ul>
+                
+                <!-- Mobile CTA -->
+                <div class="d-lg-none mt-3">
+                    <a th:href="@{/subscription}" class="btn btn-gradient w-100">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-5" style="margin-top: 120px; background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, var(--bg-secondary) 100%);">
+        <div class="container">
+            <div class="text-center">
+                <div class="section-badge mb-3">
+                    <i class="bi bi-currency-dollar me-2"></i>
+                    <span>Pricing Plans</span>
+                </div>
+                <h1 class="display-4 fw-bold mb-4">
+                    Choose Your <span class="gradient-text">Plan</span>
+                </h1>
+                <p class="lead text-muted mx-auto" style="max-width: 600px;">
+                    Flexible pricing options designed to scale with your business. 
+                    All plans include our core features with varying levels of support and customization.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Plans -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <!-- Starter Plan -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card glass-card h-100 p-4">
+                        <div class="text-center mb-4">
+                            <h5 class="fw-bold">Starter</h5>
+                            <p class="text-muted">Perfect for small businesses getting started</p>
+                            <div class="display-4 fw-bold text-primary">$999</div>
+                            <small class="text-muted">/month</small>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Basic SEO optimization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Social media management (2 platforms)</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Monthly content calendar</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Basic analytics reporting</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Email support</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>1 campaign per month</li>
+                        </ul>
+                        <a th:href="@{/subscription}" class="btn btn-outline-primary w-100">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- Pro Plan (Featured) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card pricing-card-featured glass-card h-100 p-4 position-relative">
+                        <div class="position-absolute top-0 start-50 translate-middle">
+                            <span class="badge bg-gradient-primary">Most Popular</span>
+                        </div>
+                        <div class="text-center mb-4">
+                            <h5 class="fw-bold">Professional</h5>
+                            <p class="text-muted">Ideal for growing businesses</p>
+                            <div class="display-4 fw-bold text-primary">$2,499</div>
+                            <small class="text-muted">/month</small>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Advanced SEO optimization</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Social media management (5 platforms)</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Content creation & strategy</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>PPC campaign management</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Email marketing automation</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Advanced analytics & reporting</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Priority phone & email support</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>3 campaigns per month</li>
+                        </ul>
+                        <a th:href="@{/subscription}" class="btn btn-gradient w-100">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card glass-card h-100 p-4">
+                        <div class="text-center mb-4">
+                            <h5 class="fw-bold">Enterprise</h5>
+                            <p class="text-muted">For large businesses with complex needs</p>
+                            <div class="display-4 fw-bold text-primary">$4,999</div>
+                            <small class="text-muted">/month</small>
+                        </div>
+                        <ul class="list-unstyled mb-4">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Comprehensive SEO strategy</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Multi-platform social media</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Custom content production</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Advanced PPC & display ads</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Marketing automation suite</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Custom analytics dashboard</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Dedicated account manager</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>24/7 priority support</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Unlimited campaigns</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Custom integrations</li>
+                        </ul>
+                        <a th:href="@{/subscription}" class="btn btn-outline-primary w-100">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Frequently Asked Questions</h2>
+                <p class="lead text-muted">Everything you need to know about our pricing and services</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item glass-card mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Can I change my plan at any time?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle, and we'll prorate any differences.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item glass-card mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    Is there a setup fee?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    No, there are no setup fees for any of our plans. You only pay the monthly subscription fee, and we'll get you started immediately.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item glass-card mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    What's included in the analytics reporting?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our reporting includes website traffic, conversion rates, social media engagement, campaign performance, ROI analysis, and custom KPIs relevant to your business goals.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item glass-card mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                    Do you offer custom packages?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, we can create custom packages for businesses with unique needs. Contact us to discuss your requirements and we'll design a solution that fits your goals and budget.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item glass-card">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                    What is your cancellation policy?
+                                </button>
+                            </h2>
+                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    You can cancel your subscription at any time with 30 days notice. We don't believe in long-term contracts, so you're free to leave whenever you need to.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section py-5">
+        <div class="cta-background">
+            <div class="gradient-orb orb-cta-1"></div>
+            <div class="gradient-orb orb-cta-2"></div>
+        </div>
+        <div class="container position-relative text-center text-white">
+            <h2 class="display-5 fw-bold mb-3">Ready to Get Started?</h2>
+            <p class="lead mb-4">Choose the plan that's right for your business and start growing today</p>
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                <a th:href="@{subscription}" class="btn btn-light btn-lg">Start Your Subscription</a>
+                <a th:href="@{contact}" class="btn btn-outline-light btn-lg">Talk to Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-modern py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4 gx-5">
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">SERVICES</h6>
+                    <ul class="footer-list">
+                        <li><a href="services.html">Content Marketing</a></li>
+                        <li><a href="services.html">Data Analytics</a></li>
+                        <li><a href="services.html">Audience Targeting</a></li>
+                        <li><a href="services.html">Social Media Marketing</a></li>
+                        <li><a href="services.html">SEO Optimization</a></li>
+                        <li><a href="services.html">Performance Optimization</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">COMPANY</h6>
+                    <ul class="footer-list">
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">RESOURCES</h6>
+                    <ul class="footer-list">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Guides</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h6 class="footer-heading">GUIDES</h6>
+                    <ul class="footer-list">
+                        <li><a href="#">Digital Marketing Guide</a></li>
+                        <li><a href="#">SEO Best Practices</a></li>
+                        <li><a href="#">Content Strategy</a></li>
+                        <li><a href="#">Analytics & Reporting</a></li>
+                        <li><a href="#">Automation Tools</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <h6 class="footer-heading">FOLLOW US</h6>
+                    <div class="footer-social d-flex gap-3 mt-2">
+                        <a href="#" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-divider my-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div class="footer-copyright mb-2 mb-md-0">
+                    &copy; 2025 Cloud Mind Agency. All rights reserved.
+                </div>
+                <div class="footer-legal">
+                    <a href="#" class="me-3">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/script.js"></script>
+</body>
+</html>

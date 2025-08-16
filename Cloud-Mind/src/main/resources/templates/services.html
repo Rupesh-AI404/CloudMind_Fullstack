@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Cloud Mind</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/Images/logoF.png" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
+            </a>
+            
+            <div class="d-flex align-items-center order-lg-3">
+                <!-- Theme Toggle -->
+                <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="bi bi-sun-fill" id="lightIcon"></i>
+                    <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
+                </button>
+                
+                <!-- CTA Button -->
+                <a href="/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="/signup" class="btn btn-primary me-3">Signup</a>
+                
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pricing">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+                
+                <!-- Mobile CTA -->
+                <div class="d-lg-none mt-3">
+                    <a href="/subscription" class="btn btn-gradient w-100">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-5" style="margin-top: 120px; background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 50%, var(--bg-secondary) 100%);">
+        <div class="container">
+            <div class="text-center">
+                <div class="section-badge mb-3">
+                    <i class="bi bi-gear me-2"></i>
+                    <span>Our Services</span>
+                </div>
+                <h1 class="display-4 fw-bold mb-4">
+                    Comprehensive <span class="gradient-text">Digital Solutions</span>
+                </h1>
+                <p class="lead text-muted mx-auto" style="max-width: 600px;">
+                    Transform your digital presence with our full-suite marketing services designed 
+                    to drive growth, increase visibility, and maximize ROI.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Grid -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">SEO Optimization</h5>
+                        <p class="text-muted mb-4">
+                            Boost your search engine rankings and drive organic traffic with our comprehensive SEO strategies.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i>Keyword Research</li>
+                            <li><i class="bi bi-check text-success me-2"></i>On-Page Optimization</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Technical SEO</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Link Building</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-primary mb-2">Starting at $1,500/month</p>
+                            <a href="/contact" class="btn btn-outline-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Social Media Marketing</h5>
+                        <p class="text-muted mb-4">
+                            Build a strong social presence and engage with your audience across all major platforms.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i>Content Creation</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Community Management</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Paid Advertising</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Analytics</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-primary mb-2">Starting at $1,200/month</p>
+                            <a href="/contact" class="btn btn-outline-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Content Marketing</h5>
+                        <p class="text-muted mb-4">
+                            Create compelling content that tells your brand story and drives customer engagement.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i>Blog Writing</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Video Production</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Infographics</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Content Strategy</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-primary mb-2">Starting at $1,000/month</p>
+                            <a href="/contact" class="btn btn-outline-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Email Marketing</h5>
+                        <p class="text-muted mb-4">
+                            Nurture leads and retain customers with personalized email campaigns that convert.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i>Campaign Design</li>
+                            <li><i class="bi bi-check text-success me-2"></i>List Management</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Automation</li>
+                            <li><i class="bi bi-check text-success me-2"></i>A/B Testing</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-primary mb-2">Starting at $800/month</p>
+                            <a href="/contact" class="btn btn-outline-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-bullseye"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">PPC Advertising</h5>
+                        <p class="text-muted mb-4">
+                            Drive immediate results with targeted pay-per-click campaigns across Google and social platforms.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i>Campaign Setup</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Keyword Bidding</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Ad Creation</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Performance Optimization</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-primary mb-2">Starting at $2,000/month</p>
+                            <a href="/contact" class="btn btn-outline-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card glass-card h-100 p-4">
+                        <div class="service-icon mb-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Analytics & Reporting</h5>
+                        <p class="text-muted mb-4">
+                            Track, measure, and optimize your marketing performance with detailed analytics and insights.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i>Custom Dashboards</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Monthly Reports</li>
+                            <li><i class="bi bi-check text-success me-2"></i>ROI Analysis</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Data Insights</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <p class="fw-bold text-primary mb-2">Starting at $600/month</p>
+                            <a href="/contact" class="btn btn-outline-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Our Process</h2>
+                <p class="lead text-muted">How we deliver exceptional results</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" 
+                             style="width: 80px; height: 80px; background: var(--brand-gradient); color: white;">
+                            <span class="fw-bold fs-4">01</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">Discovery</h5>
+                        <p class="text-muted">We analyze your business, goals, and target audience</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" 
+                             style="width: 80px; height: 80px; background: var(--brand-gradient); color: white;">
+                            <span class="fw-bold fs-4">02</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">Strategy</h5>
+                        <p class="text-muted">We develop a customized marketing strategy for your needs</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" 
+                             style="width: 80px; height: 80px; background: var(--brand-gradient); color: white;">
+                            <span class="fw-bold fs-4">03</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">Execution</h5>
+                        <p class="text-muted">We implement campaigns across all relevant channels</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="text-center">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" 
+                             style="width: 80px; height: 80px; background: var(--brand-gradient); color: white;">
+                            <span class="fw-bold fs-4">04</span>
+                        </div>
+                        <h5 class="fw-bold mb-2">Optimization</h5>
+                        <p class="text-muted">We continuously monitor and improve performance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section py-5">
+        <div class="cta-background">
+            <div class="gradient-orb orb-cta-1"></div>
+            <div class="gradient-orb orb-cta-2"></div>
+        </div>
+        <div class="container position-relative text-center text-white">
+            <h2 class="display-5 fw-bold mb-3">Ready to Get Started?</h2>
+            <p class="lead mb-4">Let's discuss how our services can help grow your business</p>
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                <a href="/pricing" class="btn btn-outline-light btn-lg">View Pricing Plans</a>
+                <a href="/contact" class="btn btn-light btn-lg">Get Free Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-modern py-5 mt-5">
+        <div class="container">
+            <div class="row gy-4 gx-5">
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">SERVICES</h6>
+                    <ul class="footer-list">
+                        <li><a href="/services">Content Marketing</a></li>
+                        <li><a href="/services">Data Analytics</a></li>
+                        <li><a href="/services">Audience Targeting</a></li>
+                        <li><a href="/services">Social Media Marketing</a></li>
+                        <li><a href="/services">SEO Optimization</a></li>
+                        <li><a href="/services">Performance Optimization</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">COMPANY</h6>
+                    <ul class="footer-list">
+                        <li><a href="/about">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="footer-heading">RESOURCES</h6>
+                    <ul class="footer-list">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Guides</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h6 class="footer-heading">GUIDES</h6>
+                    <ul class="footer-list">
+                        <li><a href="#">Digital Marketing Guide</a></li>
+                        <li><a href="#">SEO Best Practices</a></li>
+                        <li><a href="#">Content Strategy</a></li>
+                        <li><a href="#">Analytics & Reporting</a></li>
+                        <li><a href="#">Automation Tools</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <h6 class="footer-heading">FOLLOW US</h6>
+                    <div class="footer-social d-flex gap-3 mt-2">
+                        <a href="#" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="footer-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-divider my-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div class="footer-copyright mb-2 mb-md-0">
+                    &copy; 2025 Cloud Mind Agency. All rights reserved.
+                </div>
+                <div class="footer-legal">
+                    <a href="#" class="me-3">Terms of Use</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/script.js"></script>
+</body>
+</html>

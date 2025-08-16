@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Cloud Mind</title>
+    <meta name="description" content="Create your Cloud Mind account to start your digital marketing journey.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+            <img src="/images/logoF.png" th:src="@{/images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
+        </a>
+        <div class="d-flex align-items-center order-lg-3">
+            <a th:href="@{/login}" class="btn btn-outline-primary me-3">Login</a>
+            <a th:href="@{/signup}" class="btn btn-primary me-2">Signup</a>
+        </div>
+    </div>
+</nav>
+<div class="auth-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+</div>
+
+<main class="d-flex align-items-center justify-content-center min-vh-100 position-relative" style="padding-top: 120px; z-index: 2;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="auth-card glass-card p-5 shadow-lg">
+                    <div class="text-center mb-4">
+                        <div class="auth-icon mb-3"><i class="bi bi-person-plus"></i></div>
+                        <h2 class="fw-bold mb-2">Create Account</h2>
+                        <p class="text-muted">Start your digital marketing journey with Cloud Mind</p>
+                    </div>
+                    <p th:if="${error}" class="text-danger text-center" th:text="${error}"></p>
+                    <form class="auth-form" autocomplete="off" method="post" th:action="@{/signup}" id="signupForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="signupFirstName" class="form-label fw-medium">First Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-person text-muted"></i></span>
+                                    <input type="text" class="form-control border-start-0 ps-0" id="signupFirstName" name="firstName" placeholder="First Name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="signupLastName" class="form-label fw-medium">Last Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-person text-muted"></i></span>
+                                    <input type="text" class="form-control border-start-0 ps-0" id="signupLastName" name="lastName" placeholder="Last Name" required>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-4">
+                            <label for="signupEmail" class="form-label fw-medium">Email address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+                                <input type="email" class="form-control border-start-0 ps-0" id="signupEmail" name="email" placeholder="email" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="signupPassword" class="form-label fw-medium">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-lock text-muted"></i></span>
+                                <input type="password" class="form-control border-start-0 ps-0" id="signupPassword" name="password" placeholder="Create a strong password" required autocomplete="new-password">
+                                <button class="btn btn-outline-secondary border-start-0" type="button" id="toggleSignupPassword">
+                                    <i class="bi bi-eye" id="toggleSignupIcon"></i>
+                                </button>
+                            </div>
+                            <div class="password-strength mt-2">
+                                <div class="progress" style="height: 4px;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <small class="text-muted mt-1 d-block">Password strength: <span id="strengthText">Weak</span></small>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="signupConfirmPassword" class="form-label fw-medium">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-shield-check text-muted"></i></span>
+                                <input type="password" class="form-control border-start-0 ps-0" id="signupConfirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                                <div class="input-group-text bg-transparent border-start-0" id="passwordMatch">
+                                    <i class="bi bi-x-circle text-danger" style="display: none;"></i>
+                                    <i class="bi bi-check-circle text-success" style="display: none;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                <label class="form-check-label text-muted" for="agreeTerms">
+                                    I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-gradient w-100 mb-4 py-3 fw-semibold">
+                            <span class="spinner-border spinner-border-sm me-2" style="display: none;" id="signupSpinner"></span>
+                            <i class="bi bi-person-check me-2"></i>
+                            Create Account
+                        </button>
+                        <div class="auth-divider mb-4">
+                            <span class="text-muted small bg-white px-3">or sign up with</span>
+                        </div>
+                        <div class="row g-2 mb-4">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-secondary w-100 py-2">
+                                    <i class="bi bi-google me-2"></i> Google
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-outline-secondary w-100 py-2">
+                                    <i class="bi bi-github me-2"></i> GitHub
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-muted">Already have an account?</span>
+                            <a th:href="@{/login}" class="text-decoration-none fw-medium ms-1">Sign In</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="footer-modern py-5 mt-5">
+    <div class="container">
+        <div class="row gy-4 gx-5">
+            <div class="col-6 col-md-3 col-lg-2">
+                <h6 class="footer-heading">SERVICES</h6>
+                <ul class="footer-list">
+                    <li><a th:href="@{/services}">Content Marketing</a></li>
+                    <li><a th:href="@{/services}">Data Analytics</a></li>
+                    <li><a th:href="@{/services}">Audience Targeting</a></li>
+                    <li><a th:href="@{/services}">Social Media Marketing</a></li>
+                    <li><a th:href="@{/services}">SEO Optimization</a></li>
+                    <li><a th:href="@{/services}">Performance Optimization</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <h6 class="footer-heading">COMPANY</h6>
+                <ul class="footer-list">
+                    <li><a th:href="@{/about}">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a th:href="@{/contact}">Contact</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-3 col-lg-2">
+                <h6 class="footer-heading">RESOURCES</h6>
+                <ul class="footer-list">
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Guides</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-3 col-lg-3">
+                <h6 class="footer-heading">GUIDES</h6>
+                <ul class="footer-list">
+                    <li><a href="#">Digital Marketing Guide</a></li>
+                    <li><a href="#">SEO Best Practices</a></li>
+                    <li><a href="#">Content Strategy</a></li>
+                    <li><a href="#">Analytics & Reporting</a></li>
+                    <li><a href="#">Automation Tools</a></li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-3">
+                <h6 class="footer-heading">FOLLOW US</h6>
+                <div class="footer-social d-flex gap-3 mt-2">
+                    <a href="#" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="footer-social-icon" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="footer-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="footer-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="footer-divider my-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div class="footer-copyright mb-2 mb-md-0">&copy; 2025 Cloud Mind Agency. All rights reserved.</div>
+            <div class="footer-legal">
+                <a href="#" class="me-3">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/script.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>
