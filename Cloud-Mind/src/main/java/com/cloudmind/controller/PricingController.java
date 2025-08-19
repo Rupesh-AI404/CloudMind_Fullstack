@@ -18,6 +18,8 @@ public class PricingController {
 //    }
 
 
+
+
     @GetMapping("/pricing")
     public String pricing(HttpSession session, Model model) {
         if (session.getAttribute("activeUser") != null) {
@@ -26,4 +28,5 @@ public class PricingController {
         }
         return "pricing";
     }
+
 }

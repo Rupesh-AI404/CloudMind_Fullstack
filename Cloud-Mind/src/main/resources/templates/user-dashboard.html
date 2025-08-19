@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - Cloud Mind</title>
     <meta name="description" content="User dashboard for managing your digital marketing campaigns and tracking performance.">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -19,487 +19,471 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
-                <img src="/Images/logoF.png" th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
-            </a>
-            
-            <div class="d-flex align-items-center order-lg-3">
-                <!-- Theme Toggle -->
-                <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <i class="bi bi-sun-fill" id="lightIcon"></i>
-                    <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+            <img src="/Images/logoF.png" th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
+        </a>
+
+        <div class="d-flex align-items-center order-lg-3">
+            <!-- Theme Toggle -->
+            <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="bi bi-sun-fill" id="lightIcon"></i>
+                <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
+            </button>
+
+            <!-- User Profile Dropdown -->
+            <div class="dropdown me-3">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle me-2"></i>John Doe
                 </button>
-                
-                <!-- User Profile Dropdown -->
-                <div class="dropdown me-3">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle me-2"></i>John Doe
-                    </button>
-                    <ul class="dropdown-menu">
-                <!--        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-credit-card me-2"></i>Billing</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                        <li><hr class="dropdown-divider"></li> -->
-                        <li><a class="dropdown-item" th:href="@{login}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Mobile Toggle -->
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            
-            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{index}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" th:href="@{user-dashboard}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{services}">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{contact}">Support</a>
-                    </li>
+                <ul class="dropdown-menu">
+
+                    <li><a class="dropdown-item" th:href="@{login}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                 </ul>
             </div>
-        </div>
-    </nav>
 
-    <!-- Dashboard Content -->
-    <main style="padding-top: 140px; min-height: 100vh; background: var(--bg-secondary);">
-        <div class="container py-4">
-            <!-- Dashboard Header -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="glass-card p-4">
-                        <div class="d-flex justify-content-between align-items-center">
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{user-dashboard}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{services}">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{contact}">Support</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Dashboard Content -->
+<main style="padding-top: 140px; min-height: 100vh; background: var(--bg-secondary);">
+    <div class="container py-4">
+        <!-- Dashboard Header with Profile -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <!-- User Profile Image -->
+                            <div class="position-relative me-4">
+                                <img id="userProfileImage" src="https://via.placeholder.com/80x80/6366f1/ffffff?text=JD" alt="Profile" class="rounded-circle border border-3 border-primary" width="80" height="80" style="cursor: pointer;" onclick="openImageUpload()">
+                                <button class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle" onclick="openImageUpload()" style="width: 28px; height: 28px; padding: 0;" title="Change Profile Picture">
+                                    <i class="bi bi-camera"></i>
+                                </button>
+                                <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                            </div>
                             <div>
                                 <h1 class="h3 mb-1 fw-bold">Welcome back, John!</h1>
                                 <p class="text-muted mb-0">Here's an overview of your marketing campaigns and performance.</p>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-outline-primary">
-                                    <i class="bi bi-download me-2"></i>Download Report
-                                </button>
-                                <button class="btn btn-gradient">
-                                    <i class="bi bi-plus-circle me-2"></i>Create Campaign
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="glass-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <div class="text-muted small mb-1">Active Campaigns</div>
-                                <div class="h4 fw-bold mb-0">8</div>
-                                <div class="text-success small">
-                                    <i class="bi bi-arrow-up"></i> +2 this month
+                                <div class="mt-2">
+                                    <span class="badge bg-success me-2">Pro Member</span>
+                                    <span class="small text-muted">Member since Jan 2025</span>
                                 </div>
                             </div>
-                            <div class="text-primary fs-1">
-                                <i class="bi bi-rocket"></i>
-                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="glass-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <div class="text-muted small mb-1">Total Reach</div>
-                                <div class="h4 fw-bold mb-0">24.5K</div>
-                                <div class="text-success small">
-                                    <i class="bi bi-arrow-up"></i> +18.2%
-                                </div>
-                            </div>
-                            <div class="text-success fs-1">
-                                <i class="bi bi-eye"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="glass-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <div class="text-muted small mb-1">Conversions</div>
-                                <div class="h4 fw-bold mb-0">847</div>
-                                <div class="text-success small">
-                                    <i class="bi bi-arrow-up"></i> +12.5%
-                                </div>
-                            </div>
-                            <div class="text-warning fs-1">
-                                <i class="bi bi-graph-up-arrow"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="glass-card p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <div class="text-muted small mb-1">ROI</div>
-                                <div class="h4 fw-bold mb-0">285%</div>
-                                <div class="text-success small">
-                                    <i class="bi bi-arrow-up"></i> +24.1%
-                                </div>
-                            </div>
-                            <div class="text-info fs-1">
-                                <i class="bi bi-currency-dollar"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Performance Chart & Plan Info -->
-            <div class="row g-4 mb-4">
-                <div class="col-lg-8">
-                    <div class="glass-card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0">Campaign Performance</h5>
-                            <div class="btn-group" role="group">
-                                <input type="radio" class="btn-check" name="userTimeRange" id="userWeek" checked>
-                                <label class="btn btn-outline-primary btn-sm" for="userWeek">7D</label>
-                                <input type="radio" class="btn-check" name="userTimeRange" id="userMonth">
-                                <label class="btn btn-outline-primary btn-sm" for="userMonth">30D</label>
-                                <input type="radio" class="btn-check" name="userTimeRange" id="userYear">
-                                <label class="btn btn-outline-primary btn-sm" for="userYear">3M</label>
-                            </div>
-                        </div>
-                        <div class="chart-container d-flex align-items-end justify-content-center gap-2" style="height: 200px;">
-                            <div class="chart-bar" style="height: 35%; background: var(--brand-gradient);"></div>
-                            <div class="chart-bar" style="height: 55%; background: var(--brand-gradient);"></div>
-                            <div class="chart-bar" style="height: 45%; background: var(--brand-gradient);"></div>
-                            <div class="chart-bar" style="height: 70%; background: var(--brand-gradient);"></div>
-                            <div class="chart-bar" style="height: 85%; background: var(--brand-gradient);"></div>
-                            <div class="chart-bar" style="height: 65%; background: var(--brand-gradient);"></div>
-                            <div class="chart-bar" style="height: 90%; background: var(--brand-gradient);"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="glass-card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0"><i class="bi bi-credit-card me-2"></i>My Subscription</h5>
-                            <button class="btn btn-outline-secondary btn-sm" onclick="refreshSubscriptionData()">
-                                <i class="bi bi-arrow-clockwise"></i>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary">
+                                <i class="bi bi-download me-2"></i>Download Report
                             </button>
-                        </div>
-                        
-                        <!-- No Subscription State (Default for fresh start) -->
-                        <div id="noSubscriptionState" class="text-center py-4">
-                            <i class="bi bi-box display-4 text-muted mb-3"></i>
-                            <h6 class="text-muted">No Active Subscription</h6>
-                            <p class="small text-muted mb-4">You haven't purchased any package yet. Choose a plan to get started with our digital marketing services.</p>
-                            <div class="d-grid gap-2">
-                                <a href="pricing.html" class="btn btn-primary">
-                                    <i class="bi bi-plus-circle me-2"></i>Choose a Plan
-                                </a>
-                                <button class="btn btn-outline-secondary btn-sm" onclick="showNotification('Contact support for help choosing a plan', 'info')">
-                                    <i class="bi bi-question-circle me-1"></i>Need Help?
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Active Subscription State (Hidden by default) -->
-                        <div id="activeSubscriptionState" class="d-none">
-                            <div class="text-center mb-4">
-                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                                    <i class="bi bi-star-fill fs-4"></i>
-                                </div>
-                                <h6 class="fw-bold" id="planName">Pro Plan</h6>
-                                <p class="text-muted small mb-0" id="planDescription">Perfect for growing businesses</p>
-                                <div class="badge bg-success mt-2" id="planStatus">Active</div>
-                            </div>
-                            
-                            <!-- Subscription Details -->
-                            <div class="subscription-details mb-4">
-                                <div class="row g-2 text-center">
-                                    <div class="col-6">
-                                        <div class="bg-light rounded p-2">
-                                            <div class="fw-bold text-primary" id="daysLeft">0</div>
-                                            <div class="small text-muted">Days Left</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="bg-light rounded p-2">
-                                            <div class="fw-bold text-success" id="monthlyPrice">$0</div>
-                                            <div class="small text-muted">Monthly</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Time Progress -->
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small">Subscription Progress</span>
-                                    <span class="small fw-bold" id="timeProgress">0%</span>
-                                </div>
-                                <div class="progress" style="height: 8px;">
-                                    <div class="progress-bar bg-success" id="timeProgressBar" style="width: 0%;"></div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-1">
-                                    <span class="small text-muted" id="startDate">Start Date</span>
-                                    <span class="small text-muted" id="endDate">End Date</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Usage Stats -->
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small">Campaigns Used</span>
-                                    <span class="small fw-bold" id="campaignsUsed">0/0</span>
-                                </div>
-                                <div class="progress" style="height: 6px;">
-                                    <div class="progress-bar" id="campaignsProgressBar" style="width: 0%; background: var(--brand-gradient);"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small">API Calls</span>
-                                    <span class="small fw-bold" id="apiCallsUsed">0/0</span>
-                                </div>
-                                <div class="progress" style="height: 6px;">
-                                    <div class="progress-bar" id="apiCallsProgressBar" style="width: 0%; background: var(--brand-gradient);"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Action Buttons -->
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-success" id="renewButton" onclick="renewSubscription()">
-                                    <i class="bi bi-arrow-repeat me-2"></i>Renew Subscription
-                                </button>
-                                <button class="btn btn-outline-primary" onclick="upgradeSubscription()">
-                                    <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
-                                </button>
-                                <button class="btn btn-outline-secondary btn-sm" onclick="viewSubscriptionDetails()">
-                                    <i class="bi bi-eye me-1"></i>View Details
-                                </button>
-                            </div>
-                            
-                            <!-- Auto-renewal Info -->
-                            <div class="mt-3 p-2 bg-light rounded">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="small">Auto-renewal:</span>
-                                    <span class="small fw-bold text-success" id="autoRenewalStatus">OFF</span>
-                                </div>
-                                <button class="btn btn-link btn-sm p-0 text-decoration-none" onclick="toggleAutoRenewal()">
-                                    <i class="bi bi-gear me-1"></i>Manage
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Expired Subscription State (Hidden by default) -->
-                        <div id="expiredSubscriptionState" class="d-none">
-                            <div class="text-center mb-4">
-                                <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                                    <i class="bi bi-exclamation-triangle fs-4"></i>
-                                </div>
-                                <h6 class="fw-bold text-danger">Subscription Expired</h6>
-                                <p class="text-muted small mb-0">Your subscription has ended. Renew to continue using our services.</p>
-                            </div>
-                            
-                            <div class="alert alert-warning" role="alert">
-                                <i class="bi bi-clock me-2"></i>
-                                <strong>Expired:</strong> <span id="expiredDate">--</span>
-                            </div>
-                            
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary" onclick="renewExpiredSubscription()">
-                                    <i class="bi bi-arrow-repeat me-2"></i>Renew Now
-                                </button>
-                                <a href="pricing.html" class="btn btn-outline-primary">
-                                    <i class="bi bi-eye me-2"></i>View Plans
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Campaigns & Quick Actions -->
-            <div class="row g-4 mb-4">
-                <div class="col-lg-8">
-                    <div class="glass-card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0">Recent Campaigns</h5>
-                            <a href="#" class="btn btn-outline-primary btn-sm">View All</a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="border-0 small text-muted">Campaign</th>
-                                        <th class="border-0 small text-muted">Type</th>
-                                        <th class="border-0 small text-muted">Status</th>
-                                        <th class="border-0 small text-muted">Performance</th>
-                                        <th class="border-0 small text-muted">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border-0">
-                                            <div>
-                                                <div class="fw-semibold">Summer Sale 2024</div>
-                                                <div class="small text-muted">Created 2 days ago</div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge bg-primary">Social Media</span>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge bg-success">Active</span>
-                                        </td>
-                                        <td class="border-0">
-                                            <div class="small">
-                                                <div class="text-success">↗ 24.5% CTR</div>
-                                                <div class="text-muted">1.2K clicks</div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary">Edit</button>
-                                                <button class="btn btn-outline-secondary">View</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-0">
-                                            <div>
-                                                <div class="fw-semibold">Product Launch</div>
-                                                <div class="small text-muted">Created 1 week ago</div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge bg-warning">Email</span>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge bg-success">Active</span>
-                                        </td>
-                                        <td class="border-0">
-                                            <div class="small">
-                                                <div class="text-success">↗ 18.2% Open Rate</div>
-                                                <div class="text-muted">3.4K opens</div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary">Edit</button>
-                                                <button class="btn btn-outline-secondary">View</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border-0">
-                                            <div>
-                                                <div class="fw-semibold">Brand Awareness</div>
-                                                <div class="small text-muted">Created 2 weeks ago</div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge bg-info">Display Ads</span>
-                                        </td>
-                                        <td class="border-0">
-                                            <span class="badge bg-secondary">Paused</span>
-                                        </td>
-                                        <td class="border-0">
-                                            <div class="small">
-                                                <div class="text-warning">↗ 12.1% CTR</div>
-                                                <div class="text-muted">856 clicks</div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0">
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary">Resume</button>
-                                                <button class="btn btn-outline-secondary">View</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="glass-card p-4">
-                        <h5 class="fw-bold mb-4">Quick Actions</h5>
-                        <div class="d-grid gap-3">
                             <button class="btn btn-gradient">
-                                <i class="bi bi-plus-circle me-2"></i>Create New Campaign
+                                <i class="bi bi-plus-circle me-2"></i>Create Campaign
                             </button>
-                            <button class="btn btn-outline-primary">
-                                <i class="bi bi-pencil-square me-2"></i>Content Creator
-                            </button>
-                            <button class="btn btn-outline-primary">
-                                <i class="bi bi-graph-up me-2"></i>Analytics Report
-                            </button>
-                            <button class="btn btn-outline-primary">
-                                <i class="bi bi-people me-2"></i>Audience Insights
-                            </button>
-                            <button class="btn btn-outline-primary">
-                                <i class="bi bi-calendar-event me-2"></i>Schedule Posts
-                            </button>
-                        </div>
-                        
-                        <hr class="my-4">
-                        
-                        <h6 class="fw-bold mb-3">Recent Activity</h6>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item border-0 px-0 py-2">
-                                <div class="d-flex align-items-start">
-                                    <div class="text-success me-3 mt-1">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-semibold">Campaign Approved</div>
-                                        <div class="small text-muted">Summer Sale 2024 is now live</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item border-0 px-0 py-2">
-                                <div class="d-flex align-items-start">
-                                    <div class="text-primary me-3 mt-1">
-                                        <i class="bi bi-graph-up"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-semibold">Performance Update</div>
-                                        <div class="small text-muted">ROI increased by 24.1%</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item border-0 px-0 py-2">
-                                <div class="d-flex align-items-start">
-                                    <div class="text-info me-3 mt-1">
-                                        <i class="bi bi-lightbulb"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-semibold">Marketing Insight</div>
-                                        <div class="small text-muted">Optimize ad targeting for better results</div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+
+        <!-- Quick Stats -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-muted small mb-1">Active Campaigns</div>
+                            <div class="h4 fw-bold mb-0">8</div>
+                            <div class="text-success small">
+                                <i class="bi bi-arrow-up"></i> +2 this month
+                            </div>
+                        </div>
+                        <div class="text-primary fs-1">
+                            <i class="bi bi-rocket"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-muted small mb-1">Total Reach</div>
+                            <div class="h4 fw-bold mb-0">24.5K</div>
+                            <div class="text-success small">
+                                <i class="bi bi-arrow-up"></i> +18.2%
+                            </div>
+                        </div>
+                        <div class="text-success fs-1">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-muted small mb-1">Conversions</div>
+                            <div class="h4 fw-bold mb-0">847</div>
+                            <div class="text-success small">
+                                <i class="bi bi-arrow-up"></i> +12.5%
+                            </div>
+                        </div>
+                        <div class="text-warning fs-1">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <div class="text-muted small mb-1">ROI</div>
+                            <div class="h4 fw-bold mb-0">285%</div>
+                            <div class="text-success small">
+                                <i class="bi bi-arrow-up"></i> +24.1%
+                            </div>
+                        </div>
+                        <div class="text-info fs-1">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Subscription (Prominent Section) -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-5 border-3 border-primary" style="background: linear-gradient(135deg, var(--glass-bg), rgba(99, 102, 241, 0.05)); box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold mb-0 text-primary"><i class="bi bi-star-fill me-3"></i>My Subscription</h3>
+                        <button class="btn btn-outline-primary" onclick="refreshSubscriptionData()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+                        </button>
+                    </div>
+
+                    <!-- No Subscription State (Default for fresh start) -->
+                    <div id="noSubscriptionState" class="text-center py-4">
+                        <i class="bi bi-box display-4 text-muted mb-3"></i>
+                        <h6 class="text-muted">No Active Subscription</h6>
+                        <p class="small text-muted mb-4">You haven't purchased any package yet. Choose a plan to get started with our digital marketing services.</p>
+                        <div class="d-grid gap-2">
+                            <a th:href="@{pricing}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Choose a Plan
+                            </a>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="showNotification('Contact support for help choosing a plan', 'info')">
+                                <i class="bi bi-question-circle me-1"></i>Need Help?
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Subscription State (Hidden by default) -->
+                    <div id="activeSubscriptionState" class="d-none">
+                        <div class="text-center mb-4">
+                            <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="bi bi-star-fill fs-4"></i>
+                            </div>
+                            <h6 class="fw-bold" id="planName">Pro Plan</h6>
+                            <p class="text-muted small mb-0" id="planDescription">Perfect for growing businesses</p>
+                            <div class="badge bg-success mt-2" id="planStatus">Active</div>
+                        </div>
+
+                        <!-- Subscription Details -->
+                        <div class="subscription-details mb-4">
+                            <div class="row g-2 text-center">
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2">
+                                        <div class="fw-bold text-primary" id="daysLeft">0</div>
+                                        <div class="small text-muted">Days Left</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2">
+                                        <div class="fw-bold text-success" id="monthlyPrice">$0</div>
+                                        <div class="small text-muted">Monthly</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time Progress -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small">Subscription Progress</span>
+                                <span class="small fw-bold" id="timeProgress">0%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" id="timeProgressBar" style="width: 0%;"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="small text-muted" id="startDate">Start Date</span>
+                                <span class="small text-muted" id="endDate">End Date</span>
+                            </div>
+                        </div>
+
+                        <!-- Usage Stats -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small">Campaigns Used</span>
+                                <span class="small fw-bold" id="campaignsUsed">0/0</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar" id="campaignsProgressBar" style="width: 0%; background: var(--brand-gradient);"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small">API Calls</span>
+                                <span class="small fw-bold" id="apiCallsUsed">0/0</span>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar" id="apiCallsProgressBar" style="width: 0%; background: var(--brand-gradient);"></div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" id="renewButton" onclick="renewSubscription()">
+                                <i class="bi bi-arrow-repeat me-2"></i>Renew Subscription
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="upgradeSubscription()">
+                                <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="viewSubscriptionDetails()">
+                                <i class="bi bi-eye me-1"></i>View Details
+                            </button>
+                        </div>
+
+                        <!-- Auto-renewal Info -->
+                        <div class="mt-3 p-2 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small">Auto-renewal:</span>
+                                <span class="small fw-bold text-success" id="autoRenewalStatus">OFF</span>
+                            </div>
+                            <button class="btn btn-link btn-sm p-0 text-decoration-none" onclick="toggleAutoRenewal()">
+                                <i class="bi bi-gear me-1"></i>Manage
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Expired Subscription State (Hidden by default) -->
+                    <div id="expiredSubscriptionState" class="d-none">
+                        <div class="text-center mb-4">
+                            <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="bi bi-exclamation-triangle fs-4"></i>
+                            </div>
+                            <h6 class="fw-bold text-danger">Subscription Expired</h6>
+                            <p class="text-muted small mb-0">Your subscription has ended. Renew to continue using our services.</p>
+                        </div>
+
+                        <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-clock me-2"></i>
+                            <strong>Expired:</strong> <span id="expiredDate">--</span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" onclick="renewExpiredSubscription()">
+                                <i class="bi bi-arrow-repeat me-2"></i>Renew Now
+                            </button>
+                            <a href="pricing.html" class="btn btn-outline-primary">
+                                <i class="bi bi-eye me-2"></i>View Plans
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart & Recent Campaigns -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="glass-card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Campaign Performance</h5>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="userTimeRange" id="userWeek" checked>
+                            <label class="btn btn-outline-primary btn-sm" for="userWeek">7D</label>
+                            <input type="radio" class="btn-check" name="userTimeRange" id="userMonth">
+                            <label class="btn btn-outline-primary btn-sm" for="userMonth">30D</label>
+                            <input type="radio" class="btn-check" name="userTimeRange" id="userYear">
+                            <label class="btn btn-outline-primary btn-sm" for="userYear">3M</label>
+                        </div>
+                    </div>
+                    <div class="chart-container d-flex align-items-end justify-content-center gap-2" style="height: 200px;">
+                        <div class="chart-bar" style="height: 35%; background: var(--brand-gradient);"></div>
+                        <div class="chart-bar" style="height: 55%; background: var(--brand-gradient);"></div>
+                        <div class="chart-bar" style="height: 45%; background: var(--brand-gradient);"></div>
+                        <div class="chart-bar" style="height: 70%; background: var(--brand-gradient);"></div>
+                        <div class="chart-bar" style="height: 85%; background: var(--brand-gradient);"></div>
+                        <div class="chart-bar" style="height: 65%; background: var(--brand-gradient);"></div>
+                        <div class="chart-bar" style="height: 90%; background: var(--brand-gradient);"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="glass-card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Recent Campaigns</h5>
+                        <a href="#" class="btn btn-outline-primary btn-sm">View All</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="border-0 small text-muted">Campaign</th>
+                                <th class="border-0 small text-muted">Type</th>
+                                <th class="border-0 small text-muted">Status</th>
+                                <th class="border-0 small text-muted">Performance</th>
+                                <th class="border-0 small text-muted">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="border-0">
+                                    <div>
+                                        <div class="fw-semibold">Summer Sale 2024</div>
+                                        <div class="small text-muted">Created 2 days ago</div>
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <span class="badge bg-primary">Social Media</span>
+                                </td>
+                                <td class="border-0">
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                                <td class="border-0">
+                                    <div class="small">
+                                        <div class="text-success">↗ 24.5% CTR</div>
+                                        <div class="text-muted">1.2K clicks</div>
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary">Edit</button>
+                                        <button class="btn btn-outline-secondary">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border-0">
+                                    <div>
+                                        <div class="fw-semibold">Product Launch</div>
+                                        <div class="small text-muted">Created 1 week ago</div>
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <span class="badge bg-warning">Email</span>
+                                </td>
+                                <td class="border-0">
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                                <td class="border-0">
+                                    <div class="small">
+                                        <div class="text-success">↗ 18.2% Open Rate</div>
+                                        <div class="text-muted">3.4K opens</div>
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary">Edit</button>
+                                        <button class="btn btn-outline-secondary">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border-0">
+                                    <div>
+                                        <div class="fw-semibold">Brand Awareness</div>
+                                        <div class="small text-muted">Created 2 weeks ago</div>
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <span class="badge bg-info">Display Ads</span>
+                                </td>
+                                <td class="border-0">
+                                    <span class="badge bg-secondary">Paused</span>
+                                </td>
+                                <td class="border-0">
+                                    <div class="small">
+                                        <div class="text-warning">↗ 12.1% CTR</div>
+                                        <div class="text-muted">856 clicks</div>
+                                    </div>
+                                </td>
+                                <td class="border-0">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary">Resume</button>
+                                        <button class="btn btn-outline-secondary">View</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Profile Image Upload Modal -->
+<div class="modal fade" id="profileImageModal" tabindex="-1" aria-labelledby="profileImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileImageModalLabel">
+                    <i class="bi bi-camera me-2"></i>Update Profile Picture
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <img id="previewImage" src="https://via.placeholder.com/150x150/6366f1/ffffff?text=JD" alt="Preview" class="rounded-circle border border-3 border-primary" width="150" height="150">
+                </div>
+                <div class="mb-3">
+                    <label for="imageUploadInput" class="form-label">Choose a new profile picture</label>
+                    <input type="file" class="form-control" id="imageUploadInput" accept="image/*" onchange="previewImageUpload(event)">
+                </div>
+                <div class="text-muted small">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Supported formats: JPG, PNG, GIF (Max 5MB)
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveProfileImage()">
+                    <i class="bi bi-check me-2"></i>Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Footer -->
     <footer class="footer-modern py-5 mt-5">
@@ -573,6 +557,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/script.js"></script>
+
 </body>
 </html>
-
