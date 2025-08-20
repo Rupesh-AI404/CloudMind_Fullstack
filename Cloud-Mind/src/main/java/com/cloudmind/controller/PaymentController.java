@@ -72,8 +72,9 @@ public class PaymentController {
 
         subscriberRepo.save(subscriber);
 
+        model.addAttribute("success", true);
         // ✅ redirect back to payment page with success flag
-        return "redirect:/payment?success=true";
+        return "payment";
     }
 
 }
