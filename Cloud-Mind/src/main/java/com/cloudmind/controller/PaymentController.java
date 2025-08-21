@@ -20,8 +20,15 @@ public class PaymentController {
     @Value("${app.hash-salt:cmind-default-salt-change-me}")
     private String hashSalt;
 
+
     @GetMapping("/payment")
-    public String payment(HttpSession session, Model model, @RequestParam(value="success", required=false) String success) {
+    public String payment(Model model, HttpSession session) {
+        // No need to manually add activeUser - BaseController does it automatically
+        return "payment";
+    }
+
+    @GetMapping("/payment/success")
+    public String processPayment(HttpSession session, Model model, @RequestParam(value="success", required=false) String success) {
         if (session.getAttribute("activeUser") == null) return "redirect:/login";
 
         Subscriber subscriber = (Subscriber) session.getAttribute("subscriber");
@@ -33,7 +40,7 @@ public class PaymentController {
         model.addAttribute("activeUser", session.getAttribute("activeUser"));
         model.addAttribute("userRole", session.getAttribute("userRole"));
         if ("true".equals(success)) model.addAttribute("success", true);
-        return "payment";
+        return "payment-success";
     }
 
     @PostMapping("/payment")

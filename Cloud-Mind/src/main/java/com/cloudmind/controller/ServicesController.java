@@ -20,10 +20,10 @@ public class ServicesController {
 
     @GetMapping("/services")
     public String services(HttpSession session, Model model) {
-        if (session.getAttribute("activeUser") != null) {
-            model.addAttribute("activeUser", session.getAttribute("activeUser"));
-            model.addAttribute("userRole", session.getAttribute("userRole"));
-        }
+//        if (session.getAttribute("activeUser") != null) {
+//            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+//            model.addAttribute("userRole", session.getAttribute("userRole"));
+//        }
         return "services";
     }
 }

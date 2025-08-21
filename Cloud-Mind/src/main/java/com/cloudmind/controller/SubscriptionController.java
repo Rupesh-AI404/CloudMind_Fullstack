@@ -17,8 +17,8 @@ public class SubscriptionController {
         if (session.getAttribute("activeUser") == null) {
             return "redirect:/signup";
         }
-        model.addAttribute("activeUser", session.getAttribute("activeUser"));
-        model.addAttribute("userRole", session.getAttribute("userRole"));
+//        model.addAttribute("activeUser", session.getAttribute("activeUser"));
+//        model.addAttribute("userRole", session.getAttribute("userRole"));
         model.addAttribute("subscriber", new Subscriber()); // Ensure a new instance is available
         return "subscription";
     }

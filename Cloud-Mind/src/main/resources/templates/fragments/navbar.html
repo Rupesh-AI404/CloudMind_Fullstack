@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+            <img th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
+        </a>
+
+        <div class="d-flex align-items-center order-lg-3">
+            <!-- Theme Toggle -->
+            <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i class="bi bi-sun-fill" id="lightIcon"></i>
+                <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
+            </button>
+
+            <!-- User Actions -->
+            <div id="user-actions" class="d-flex gap-2 me-3">
+                <a th:href="@{/login}" class="btn btn-outline-primary" id="login-btn">Login</a>
+                <a th:href="@{/signup}" class="btn btn-primary" id="signup-btn">Sign Up</a>
+            </div>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="bi bi-house me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/about}">
+                        <i class="bi bi-info-circle me-1"></i>About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/services}">
+                        <i class="bi bi-gear me-1"></i>Services
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pricing}">
+                        <i class="bi bi-currency-dollar me-1"></i>Pricing
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/contact}">
+                        <i class="bi bi-envelope me-1"></i>Contact
+                    </a>
+                </li>
+                <!-- Add this dashboard nav item -->
+                <li class="nav-item" id="dashboard-nav" style="display: none;">
+                    <a class="nav-link" href="#" id="dashboard-link">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item" id="subscription-nav" style="display: none;">
+                    <a class="nav-link" th:href="@{/subscription}">
+                        <i class="bi bi-star me-1"></i>Subscribe
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

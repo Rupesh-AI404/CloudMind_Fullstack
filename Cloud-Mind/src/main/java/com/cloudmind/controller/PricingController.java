@@ -22,10 +22,10 @@ public class PricingController {
 
     @GetMapping("/pricing")
     public String pricing(HttpSession session, Model model) {
-        if (session.getAttribute("activeUser") != null) {
-            model.addAttribute("activeUser", session.getAttribute("activeUser"));
-            model.addAttribute("userRole", session.getAttribute("userRole"));
-        }
+//        if (session.getAttribute("activeUser") != null) {
+//            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+//            model.addAttribute("userRole", session.getAttribute("userRole"));
+//        }
         return "pricing";
     }
 

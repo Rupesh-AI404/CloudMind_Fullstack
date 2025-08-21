@@ -9,40 +9,43 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
-            <img src="/Images/logoF.png" th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />
-        </a>
-        <div class="d-flex align-items-center order-lg-3">
-            <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <i class="bi bi-sun-fill" id="lightIcon"></i>
-                <i class="bi bi-moon-fill d-none" id="darkIcon"></i>
-            </button>
-            <div th:if="${activeUser == null}">
-                <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>
-                <a th:href="@{/signup}" class="btn btn-primary me-3">Signup</a>
-            </div>
-            <div th:if="${activeUser != null}" class="d-flex align-items-center">
-                <span class="me-3 text-white">Welcome, <span th:text="${activeUser}"></span></span>
-                <a th:href="@{/logout}" class="btn btn-danger">Logout</a>
-            </div>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/services}">Services</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/pricing}">Pricing</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!--&lt;!&ndash; Navigation &ndash;&gt;-->
+<!--<nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">-->
+<!--    <div class="container">-->
+<!--        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">-->
+<!--            <img src="/Images/logoF.png" th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />-->
+<!--        </a>-->
+<!--        <div class="d-flex align-items-center order-lg-3">-->
+<!--            <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">-->
+<!--                <i class="bi bi-sun-fill" id="lightIcon"></i>-->
+<!--                <i class="bi bi-moon-fill d-none" id="darkIcon"></i>-->
+<!--            </button>-->
+<!--            <div th:if="${activeUser == null}">-->
+<!--                <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>-->
+<!--                <a th:href="@{/signup}" class="btn btn-primary me-3">Signup</a>-->
+<!--            </div>-->
+<!--            <div th:if="${activeUser != null}" class="d-flex align-items-center">-->
+<!--                <span class="me-3 text-white">Welcome, <span th:text="${activeUser}"></span></span>-->
+<!--                <a th:href="@{/logout}" class="btn btn-danger">Logout</a>-->
+<!--            </div>-->
+<!--            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+<!--        </div>-->
+<!--        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">-->
+<!--            <ul class="navbar-nav mx-auto">-->
+<!--                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" th:href="@{/services}">Services</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" th:href="@{/pricing}">Pricing</a></li>-->
+<!--                <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
 
 <section class="py-5" style="margin-top: 80px;">
     <div class="container">
@@ -226,6 +229,10 @@
     });
 </script>
 
+
+
+<script th:src="@{/js/auth.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 
 
 <script>

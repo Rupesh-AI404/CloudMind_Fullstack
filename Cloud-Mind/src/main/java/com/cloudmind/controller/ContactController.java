@@ -20,10 +20,10 @@ public class ContactController {
 
     @GetMapping("/contact")
     public String contact(HttpSession session, Model model) {
-        if (session.getAttribute("activeUser") != null) {
-            model.addAttribute("activeUser", session.getAttribute("activeUser"));
-            model.addAttribute("userRole", session.getAttribute("userRole"));
-        }
+//        if (session.getAttribute("activeUser") != null) {
+//            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+//            model.addAttribute("userRole", session.getAttribute("userRole"));
+//        }
         return "contact";
     }
 
