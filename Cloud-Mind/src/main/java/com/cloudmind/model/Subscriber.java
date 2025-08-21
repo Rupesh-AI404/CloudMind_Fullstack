@@ -102,4 +102,44 @@ public class Subscriber {
     // monthly|annually
     private String paymentMethod; //
 
+
+    // ...
+    @Column(name = "card_last4")            private String cardLast4;
+    @Column(name = "card_fingerprint_hash") private String cardFingerprintHash;
+    @Column(name = "wallet_phone_masked")   private String walletPhoneMasked;
+    @Column(name = "wallet_phone_hash")     private String walletPhoneHash;
+// + getters/setters
+
+
+    public String getCardLast4() {
+        return cardLast4;
+    }
+
+    public void setCardLast4(String cardLast4) {
+        this.cardLast4 = cardLast4;
+    }
+
+    public String getCardFingerprintHash() {
+        return cardFingerprintHash;
+    }
+
+    public void setCardFingerprintHash(String cardFingerprintHash) {
+        this.cardFingerprintHash = cardFingerprintHash;
+    }
+
+    public String getWalletPhoneMasked() {
+        return walletPhoneMasked;
+    }
+
+    public void setWalletPhoneMasked(String walletPhoneMasked) {
+        this.walletPhoneMasked = walletPhoneMasked;
+    }
+
+    public String getWalletPhoneHash() {
+        return walletPhoneHash;
+    }
+
+    public void setWalletPhoneHash(String walletPhoneHash) {
+        this.walletPhoneHash = walletPhoneHash;
+    }
 }
