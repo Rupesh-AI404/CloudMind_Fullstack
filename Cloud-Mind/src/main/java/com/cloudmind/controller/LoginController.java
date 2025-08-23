@@ -39,6 +39,9 @@ public class LoginController {
         if ("admin@cloudmind.com".equals(email) && "admin123".equals(password)) {
             session.setAttribute("activeUser", email);
             session.setAttribute("userRole", "ADMIN");
+
+            session.setAttribute("email", email); // Add this line
+
             session.setMaxInactiveInterval(1800);
             return "redirect:/admin-dashboard";
         }
@@ -46,8 +49,11 @@ public class LoginController {
         // Find the user by email
         User existingUser = userRepo.findByEmail(email);
         if (existingUser != null && existingUser.getPassword().equals(hashedPassword)) {
-            session.setAttribute("activeUser", existingUser);
+            // Set session attributes individually instead of storing the whole object
+            session.setAttribute("activeUser", existingUser.getFirstName() + " " + existingUser.getLastName());
+            session.setAttribute("email", existingUser.getEmail()); // Add this line
             session.setAttribute("userRole", existingUser.getRole());
+            session.setAttribute("userId", existingUser.getId()); // Optional: add user ID
             session.setMaxInactiveInterval(1800);
 
             if ("ADMIN".equals(existingUser.getRole())) {
@@ -60,6 +66,8 @@ public class LoginController {
             return "login";
         }
     }
+
+
 
     @GetMapping("/auth/status")
     @ResponseBody

@@ -178,6 +178,105 @@
                 </div>
             </div>
 
+            <!-- User Purchase & Subscription Tracking -->
+            <div class="row g-4 mb-4">
+                <div class="col-12">
+                    <div class="glass-card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0"><i class="bi bi-credit-card me-2"></i>User Purchase & Subscription Tracking</h5>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-success btn-sm" onclick="exportPurchaseData()"><i class="bi bi-download me-1"></i>Export</button>
+                                <button class="btn btn-outline-primary btn-sm" onclick="refreshPurchaseData()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh</button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Controls -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <select class="form-select form-select-sm" id="packageFilter">
+                                    <option value="all">All Packages</option>
+                                    <option value="starter">Starter ($999/mo)</option>
+                                    <option value="pro">Pro ($2,499/mo)</option>
+                                    <option value="enterprise">Enterprise ($4,999/mo)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select form-select-sm" id="statusFilter">
+                                    <option value="all">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="expired">Expired</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control form-control-sm" id="dateFilter" placeholder="Filter by date">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control form-control-sm" id="searchFilter" placeholder="Search users...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="purchaseTable">
+                                <thead>
+                                <tr>
+                                    <th class="border-0 small text-muted">User Details</th>
+                                    <th class="border-0 small text-muted">Package</th>
+                                    <th class="border-0 small text-muted">Purchase Date</th>
+                                    <th class="border-0 small text-muted">Start Date</th>
+                                    <th class="border-0 small text-muted">End Date</th>
+                                    <th class="border-0 small text-muted">Duration</th>
+                                    <th class="border-0 small text-muted">Status</th>
+                                    <th class="border-0 small text-muted">Revenue</th>
+                                    <th class="border-0 small text-muted">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td colspan="9" class="border-0 text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="bi bi-inbox display-4 mb-3"></i>
+                                            <h5 class="text-muted">No Purchase Data Available</h5>
+                                            <p class="mb-0">User purchases and subscriptions will appear here once customers start subscribing to your packages.</p>
+                                            <div class="mt-3">
+                                                <button class="btn btn-outline-primary btn-sm me-2" onclick="refreshPurchaseData()">
+                                                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh Data
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-sm" onclick="showNotification('Import feature coming soon!', 'info')">
+                                                    <i class="bi bi-upload me-1"></i>Import Data
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div class="small text-muted">
+                                Showing 0 of 0 users
+                            </div>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Previous</span>
+                                    </li>
+                                    <li class="page-item active">
+                                        <span class="page-link">1</span>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Next</span>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <!-- Charts and Analytics -->
             <div class="row g-4 mb-4">
                 <div class="col-lg-8">
@@ -247,104 +346,7 @@
                 </div>
             </div>
 
-            <!-- User Purchase & Subscription Tracking -->
-            <div class="row g-4 mb-4">
-                <div class="col-12">
-                    <div class="glass-card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0"><i class="bi bi-credit-card me-2"></i>User Purchase & Subscription Tracking</h5>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-outline-success btn-sm" onclick="exportPurchaseData()"><i class="bi bi-download me-1"></i>Export</button>
-                                <button class="btn btn-outline-primary btn-sm" onclick="refreshPurchaseData()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Filter Controls -->
-                        <div class="row mb-4">
-                            <div class="col-md-3">
-                                <select class="form-select form-select-sm" id="packageFilter">
-                                    <option value="all">All Packages</option>
-                                    <option value="starter">Starter ($999/mo)</option>
-                                    <option value="pro">Pro ($2,499/mo)</option>
-                                    <option value="enterprise">Enterprise ($4,999/mo)</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select form-select-sm" id="statusFilter">
-                                    <option value="all">All Status</option>
-                                    <option value="active">Active</option>
-                                    <option value="expired">Expired</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="date" class="form-control form-control-sm" id="dateFilter" placeholder="Filter by date">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control form-control-sm" id="searchFilter" placeholder="Search users...">
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="purchaseTable">
-                                <thead>
-                                    <tr>
-                                        <th class="border-0 small text-muted">User Details</th>
-                                        <th class="border-0 small text-muted">Package</th>
-                                        <th class="border-0 small text-muted">Purchase Date</th>
-                                        <th class="border-0 small text-muted">Start Date</th>
-                                        <th class="border-0 small text-muted">End Date</th>
-                                        <th class="border-0 small text-muted">Duration</th>
-                                        <th class="border-0 small text-muted">Status</th>
-                                        <th class="border-0 small text-muted">Revenue</th>
-                                        <th class="border-0 small text-muted">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="9" class="border-0 text-center py-5">
-                                            <div class="text-muted">
-                                                <i class="bi bi-inbox display-4 mb-3"></i>
-                                                <h5 class="text-muted">No Purchase Data Available</h5>
-                                                <p class="mb-0">User purchases and subscriptions will appear here once customers start subscribing to your packages.</p>
-                                                <div class="mt-3">
-                                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="refreshPurchaseData()">
-                                                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh Data
-                                                    </button>
-                                                    <button class="btn btn-outline-secondary btn-sm" onclick="showNotification('Import feature coming soon!', 'info')">
-                                                        <i class="bi bi-upload me-1"></i>Import Data
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-between align-items-center mt-4">
-                            <div class="small text-muted">
-                                Showing 0 of 0 users
-                            </div>
-                            <nav>
-                                <ul class="pagination pagination-sm mb-0">
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Previous</span>
-                                    </li>
-                                    <li class="page-item active">
-                                        <span class="page-link">1</span>
-                                    </li>
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Next</span>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+
             <!-- Revenue Analytics -->
             <div class="row g-4 mb-4">
                 <div class="col-lg-8">
