@@ -37,7 +37,7 @@ public class LoginController {
 
         // Special admin check
         if ("admin@cloudmind.com".equals(email) && "admin123".equals(password)) {
-            session.setAttribute("activeUser", email);
+            session.setAttribute("activeUser", "Admin");
             session.setAttribute("userRole", "ADMIN");
 
             session.setAttribute("email", email); // Add this line

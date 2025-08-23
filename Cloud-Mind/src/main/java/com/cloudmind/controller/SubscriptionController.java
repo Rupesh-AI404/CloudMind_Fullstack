@@ -31,6 +31,8 @@ public class SubscriptionController {
             return "redirect:/login";
         }
 
+
+
         //Get active user from session
         Object activeUser = session.getAttribute("activeUser");
         String userEmail = null;

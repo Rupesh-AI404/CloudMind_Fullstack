@@ -32,10 +32,15 @@ public class DashboardController {
     }
 
     @GetMapping("/admin-dashboard")
-    public String adminDashboard(HttpSession session) {
+    public String adminDashboard(HttpSession session, Model model) {
         if (session.getAttribute("activeUser") == null || !"ADMIN".equals(session.getAttribute("userRole"))) {
             return "redirect:/login";
         }
+
+        model.addAttribute("activeUser", session.getAttribute("activeUser"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("userRole", session.getAttribute("userRole"));
+
         return "admin-dashboard";
     }
 }
