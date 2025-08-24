@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Confirmation</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
+        .header { text-align: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .content { margin-bottom: 20px; }
+        .content h3 { color: #0d6efd; }
+        .details { list-style-type: none; padding: 10px; background-color: #fff; border-radius: 5px; border: 1px solid #eee;}
+        .details li { margin-bottom: 10px; }
+        .details li:last-child { margin-bottom: 0; }
+        .footer { text-align: center; font-size: 0.9em; color: #777; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Thank You for Your Subscription!</h2>
+    </div>
+    <div class="content">
+        <p>Hello,</p>
+        <p>This email confirms your successful payment for your Cloud Mind subscription. We're thrilled to have you on board!</p>
+        <h3>Your Subscription Details:</h3>
+        <ul class="details">
+            <li><strong>Plan:</strong> <span th:text="${#strings.capitalize(plan)}">Professional</span></li>
+            <li><strong>Billing Cycle:</strong> <span th:text="${#strings.capitalize(billing)}">Monthly</span></li>
+            <li><strong>Payment Method:</strong> <span th:text="${#strings.capitalizeWords(paymentMethod)}">Credit Card</span></li>
+        </ul>
+        <p>You can now access your dashboard and start exploring all the features available to you. If you have any questions, please don't hesitate to contact our support team.</p>
+        <br>
+        <p>Best regards,</p>
+        <p><strong>The Cloud Mind Team</strong></p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2025 Cloud Mind Agency. All rights reserved.</p>
+    </div>
+</div>
+</body>
+<script>function handlePaymentSuccess(response) {
+    console.log('Payment successful:', response);
+
+    // Create form to submit payment details
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/payment-success';
+
+    // Add payment response data
+    const paymentIdInput = document.createElement('input');
+    paymentIdInput.type = 'hidden';
+    paymentIdInput.name = 'razorpay_payment_id';
+    paymentIdInput.value = response.razorpay_payment_id;
+
+    const orderIdInput = document.createElement('input');
+    orderIdInput.type = 'hidden';
+    orderIdInput.name = 'razorpay_order_id';
+    orderIdInput.value = response.razorpay_order_id;
+
+    if (response.razorpay_signature) {
+        const signatureInput = document.createElement('input');
+        signatureInput.type = 'hidden';
+        signatureInput.name = 'razorpay_signature';
+        signatureInput.value = response.razorpay_signature;
+        form.appendChild(signatureInput);
+    }
+
+    form.appendChild(paymentIdInput);
+    form.appendChild(orderIdInput);
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function handlePaymentFailure(error) {
+    console.log('Payment failed:', error);
+
+    // Redirect to failure handler
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/payment-failure';
+    document.body.appendChild(form);
+    form.submit();
+}</script>
+
+</html>

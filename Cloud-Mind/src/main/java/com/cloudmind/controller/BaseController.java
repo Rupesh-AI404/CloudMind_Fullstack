@@ -1,4 +1,4 @@
-package com.cloudmind.controller;
+ package com.cloudmind.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -30,7 +30,7 @@
                         <div class="d-flex align-items-center">
 
                             <!-- Profile Image Section - Replace the existing one -->
-                            <!-- Profile Image Section - Fixed Version -->
+
                             <div class="position-relative me-4">
                                 <img id="userProfileImage"
                                      th:src="@{/image/user/{email}(email=${session.email})}"
@@ -153,24 +153,164 @@
             <div class="col-12">
                 <div class="glass-card p-5 border-3 border-primary" style="background: linear-gradient(135deg, var(--glass-bg), rgba(99, 102, 241, 0.05)); box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="fw-bold mb-0 text-primary"><i class="bi bi-star-fill me-3"></i>My Subscription</h3>
+                        <h3 class="fw-bold mb-0 text-primary"><i class="bi bi-star-fill me-3"></i>Current Subscription</h3>
                         <button class="btn btn-outline-primary" onclick="refreshSubscriptionData()">
                             <i class="bi bi-arrow-clockwise me-2"></i>Refresh
                         </button>
                     </div>
 
-                    <!-- No Subscription State (Default for fresh start) -->
-                    <div id="noSubscriptionState" class="text-center py-4">
-                        <i class="bi bi-box display-4 text-muted mb-3"></i>
-                        <h6 class="text-muted">No Active Subscription</h6>
-                        <p class="small text-muted mb-4">You haven't purchased any package yet. Choose a plan to get started with our digital marketing services.</p>
-                        <div class="d-grid gap-2">
-                            <a th:href="@{pricing}" class="btn btn-primary">
-                                <i class="bi bi-plus-circle me-2"></i>Choose a Plan
-                            </a>
-                            <button class="btn btn-outline-secondary btn-sm" onclick="showNotification('Contact support for help choosing a plan', 'info')">
-                                <i class="bi bi-question-circle me-1"></i>Need Help?
-                            </button>
+                    <!-- Replace your current subscription section in user-dashboard.html with this -->
+                    <div class="subscription-section mb-5">
+                        <div class="section-header mb-4">
+                            <h4 class="fw-bold mb-0 text-primary">
+                                <i class="bi bi-credit-card me-2"></i>
+                            </h4>
+                            <p class="text-muted mb-0">Manage your subscription and billing information</p>
+                        </div>
+
+                        <!-- Subscription Card -->
+                        <div th:if="${subscriptions != null and !subscriptions.empty}">
+                            <div th:each="subscription : ${subscriptions}" th:if="${subscriptionStat.first}"
+                                 class="subscription-card">
+
+                                <!-- Card Header -->
+                                <div class="subscription-header">
+                                    <div class="plan-badge">
+                                        <span th:text="${subscription.plan}" class="plan-name">Professional</span>
+                                        <div class="status-indicator">
+                        <span th:class="${subscription.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}"
+                              th:text="${subscription.status}">ACTIVE</span>
+                                        </div>
+                                    </div>
+                                    <div class="subscription-actions">
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                                    type="button" data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-up me-2"></i>Upgrade Plan</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-down me-2"></i>Downgrade Plan</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-receipt me-2"></i>View Invoices</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-x-circle me-2"></i>Cancel Subscription</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card Body -->
+                                <div class="subscription-body">
+                                    <div class="row g-4">
+                                        <!-- Billing Information -->
+                                        <div class="col-md-6">
+                                            <div class="info-group">
+                                                <div class="info-item">
+                                                    <div class="info-icon">
+                                                        <i class="bi bi-calendar-event"></i>
+                                                    </div>
+                                                    <div class="info-content">
+                                                        <span class="info-label">Billing Cycle</span>
+                                                        <span class="info-value" th:text="${subscription.billing}">Monthly</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-item">
+                                                    <div class="info-icon">
+                                                        <i class="bi bi-calendar-plus"></i>
+                                                    </div>
+                                                    <div class="info-content">
+                                                        <span class="info-label">Subscription Date</span>
+                                                        <span class="info-value"
+                                                              th:text="${subscription.subscriptionDate != null ? #temporals.format(subscription.subscriptionDate, 'MMM dd, yyyy') : 'N/A'}">
+                                        Aug 24, 2025
+                                    </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Expiry Information -->
+                                        <div class="col-md-6">
+                                            <div class="info-group">
+                                                <div class="info-item">
+                                                    <div class="info-icon">
+                                                        <i class="bi bi-calendar-x"></i>
+                                                    </div>
+                                                    <div class="info-content">
+                                                        <span class="info-label">Expiry Date</span>
+                                                        <span class="info-value"
+                                                              th:text="${subscription.expiryDate != null ? #temporals.format(subscription.expiryDate, 'MMM dd, yyyy') : 'N/A'}">
+                                        Sept 24, 2025
+                                    </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-item">
+                                                    <div class="info-icon">
+                                                        <i class="bi bi-clock"></i>
+                                                    </div>
+                                                    <div class="info-content">
+                                                        <span class="info-label">Days Remaining</span>
+                                                        <span class="info-value days-remaining">31 days</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Progress Bar -->
+                                    <div class="subscription-progress mt-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="progress-label">Subscription Period</span>
+                                            <span class="progress-percentage">75%</span>
+                                        </div>
+                                        <div class="progress subscription-progress-bar">
+                                            <div class="progress-bar bg-gradient" style="width: 75%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quick Actions -->
+                                    <div class="quick-actions mt-4">
+                                        <div class="row g-2">
+                                            <div class="col-6 col-md-3">
+                                                <button class="btn btn-outline-primary btn-sm w-100">
+                                                    <i class="bi bi-arrow-repeat me-1"></i>Renew
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <button class="btn btn-outline-secondary btn-sm w-100">
+                                                    <i class="bi bi-credit-card me-1"></i>Payment
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <button class="btn btn-outline-info btn-sm w-100">
+                                                    <i class="bi bi-graph-up me-1"></i>Usage
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <button class="btn btn-outline-warning btn-sm w-100">
+                                                    <i class="bi bi-gear me-1"></i>Settings
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Subscription State -->
+                        <div th:if="${subscriptions == null or subscriptions.empty}" class="no-subscription-card">
+                            <div class="text-center py-5">
+                                <div class="no-subscription-icon mb-3">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">No Active Subscription</h5>
+                                <p class="text-muted mb-4">You don't have an active subscription yet. Choose a plan to get started with our services.</p>
+                                <a th:href="@{/subscription}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Choose a Plan
+                                </a>
+                            </div>
                         </div>
                     </div>
 

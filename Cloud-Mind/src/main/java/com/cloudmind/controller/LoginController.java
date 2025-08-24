@@ -40,6 +40,9 @@ public class LoginController {
             session.setAttribute("activeUser", "Admin");
             session.setAttribute("userRole", "ADMIN");
 
+           // session.setAttribute("email", "admin@cloudmind.com"); // Set actual email
+
+
             session.setAttribute("email", email); // Add this line
 
             session.setMaxInactiveInterval(1800);

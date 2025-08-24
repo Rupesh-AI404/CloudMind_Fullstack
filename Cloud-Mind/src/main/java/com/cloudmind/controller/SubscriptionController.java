@@ -1,87 +1,128 @@
 package com.cloudmind.controller;
 
 import com.cloudmind.model.Subscriber;
-import com.cloudmind.model.User;
+import com.cloudmind.repository.SubscriberRepository;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 public class SubscriptionController {
+
+    @Autowired
+    private SubscriberRepository subscriberRepository;
 
     @GetMapping("/subscription")
     public String subscription(HttpSession session, Model model) {
         if (session.getAttribute("activeUser") == null) {
             return "redirect:/signup";
         }
-//        model.addAttribute("activeUser", session.getAttribute("activeUser"));
-//        model.addAttribute("userRole", session.getAttribute("userRole"));
-        model.addAttribute("subscriber", new Subscriber()); // Ensure a new instance is available
+
+        if ("ADMIN".equals(session.getAttribute("userRole"))) {
+            return "redirect:/admin-dashboard";
+        }
+
+        model.addAttribute("subscriber", new Subscriber());
         return "subscription";
     }
 
     @PostMapping("/subscription")
     public String submitSubscription(Subscriber subscriber, HttpSession session, Model model,
                                      @RequestParam("plan") String selectedPlan,
-                                     @RequestParam("billing") String selectedBilling) {
+                                     @RequestParam("billing") String selectedBilling,
+                                     RedirectAttributes redirectAttributes) {
+
         if (session.getAttribute("activeUser") == null) {
             return "redirect:/login";
         }
 
+        if ("ADMIN".equals(session.getAttribute("userRole"))) {
+            redirectAttributes.addFlashAttribute("error", "Admin users cannot subscribe to plans");
+            return "redirect:/admin-dashboard";
+        }
 
+        String sessionEmail = (String) session.getAttribute("email");
+        String formEmail = subscriber.getEmail();
 
-        //Get active user from session
-        Object activeUser = session.getAttribute("activeUser");
-        String userEmail = null;
-
-        // extract email based on your user model structure
-        if (activeUser instanceof User) {
-            userEmail = ((User) activeUser).getEmail(); // Assuming activeUser is of type User
-            System.out.println("User email from session: " + userEmail);
-        } else if (activeUser instanceof String) {
-            userEmail = (String) activeUser; // If it's just a String email
-            System.out.println("Email string from session: " + userEmail);
-        } else {
-            model.addAttribute("error", "Invalid user session.");
-            model.addAttribute("activeUser", activeUser);
-            model.addAttribute("userRole", session.getAttribute("userRole"));
+        if (sessionEmail == null) {
+            model.addAttribute("error", "Session expired. Please logout and login again.");
+            model.addAttribute("subscriber", subscriber);
             return "subscription";
         }
 
-
-        // Debug: Print both emails for comparison
-        System.out.println("Session email: '" + userEmail + "'");
-        System.out.println("Form email: '" + subscriber.getEmail() + "'");
-        System.out.println("Emails equal: " + (userEmail != null && userEmail.equals(subscriber.getEmail())));
-
-
-        // validate email match
-        if(userEmail == null || !userEmail.equals(subscriber.getEmail()) ) {
-            System.out.println("Invalid session type: " + activeUser.getClass());
-            System.out.println("Email validation failed!");
-            model.addAttribute("error", "Email must be match with your account email");
-            model.addAttribute("activeUser", activeUser);
-            model.addAttribute("userRole", session.getAttribute("userRole"));
+        if (!sessionEmail.equals(formEmail)) {
+            model.addAttribute("error", "Email must match your account email: " + sessionEmail);
+            model.addAttribute("subscriber", subscriber);
             return "subscription";
         }
 
-
-        System.out.println("Email validation passed!");
-
-
-        // Validate subscriber data
+        // Set subscriber data with timestamp
         subscriber.setPlan(selectedPlan);
         subscriber.setBilling(selectedBilling);
-        subscriber.setEmail(userEmail);
+        subscriber.setEmail(sessionEmail);
+        subscriber.setSubscriptionDate(LocalDateTime.now());
+        subscriber.setStatus("PENDING"); // Will be updated to ACTIVE after payment
 
-        // Store subscriber and selections in session
+        // Store subscription details in session for payment processing
         session.setAttribute("subscriber", subscriber);
         session.setAttribute("selectedPlan", selectedPlan);
         session.setAttribute("selectedBilling", selectedBilling);
 
         return "redirect:/payment";
+    }
+
+    @GetMapping("/debug-subscription")
+    public String debugSubscription(HttpSession session, Model model) {
+        model.addAttribute("activeUser", session.getAttribute("activeUser"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("userRole", session.getAttribute("userRole"));
+        model.addAttribute("selectedPlan", session.getAttribute("selectedPlan"));
+        model.addAttribute("selectedBilling", session.getAttribute("selectedBilling"));
+        return "debug-session";
+    }
+
+    @PostMapping("/subscribe")
+    public String processSubscription(@ModelAttribute Subscriber subscriber,
+                                      HttpSession session, Model model) {
+        try {
+            String userEmail = (String) session.getAttribute("email");
+
+            // Check if user already has an active subscription
+            List<Subscriber> existingSubscriptions = subscriberRepository
+                    .findByEmailAndStatus(userEmail, "ACTIVE");
+
+            if (!existingSubscriptions.isEmpty()) {
+                model.addAttribute("error", "You already have an active subscription.");
+                return "subscription";
+            }
+
+            // Set user email and subscription details
+            subscriber.setEmail(userEmail);
+            subscriber.setSubscriptionDate(LocalDateTime.now());
+            subscriber.setStatus("ACTIVE");
+
+            // Calculate expiry date
+            if ("monthly".equals(subscriber.getBilling())) {
+                subscriber.setExpiryDate(LocalDateTime.now().plusMonths(1));
+            } else if ("yearly".equals(subscriber.getBilling())) {
+                subscriber.setExpiryDate(LocalDateTime.now().plusYears(1));
+            }
+
+            subscriberRepository.save(subscriber);
+            return "redirect:/user-dashboard";
+
+        } catch (Exception e) {
+            model.addAttribute("error", "Subscription failed. Please try again.");
+            return "subscription";
+        }
     }
 }
