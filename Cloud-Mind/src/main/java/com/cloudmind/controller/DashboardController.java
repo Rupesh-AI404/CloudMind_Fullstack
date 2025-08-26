@@ -37,14 +37,23 @@ public class DashboardController {
                 model.addAttribute("activeUser", userName);
                 model.addAttribute("userEmail", userEmail);
                 model.addAttribute("userRole", userRole);
+                model.addAttribute("subscribers", activeSubscriptions);
                 model.addAttribute("subscriptions", activeSubscriptions);
                 model.addAttribute("activeSubscription", activeSubscription);
                 model.addAttribute("hasActiveSubscription", activeSubscription != null);
 
+
+                if(activeSubscription != null){
+                    model.addAttribute("currentPlan", activeSubscription.getPlan());
+                    model.addAttribute("currentStatus", activeSubscription.getStatus());
+                }
+
             } catch (Exception e) {
                 System.out.println("Error fetching subscriptions: " + e.getMessage());
                 model.addAttribute("subscriptions", new ArrayList<>());
+                model.addAttribute("subscribers", new ArrayList<>());
                 model.addAttribute("hasActiveSubscription", false);
+                model.addAttribute("error", "Error loading subscription data: " + e.getMessage());
             }
         }
 
@@ -76,4 +85,6 @@ public class DashboardController {
             return "redirect:/user-dashboard";
         }
     }
+
+
 }

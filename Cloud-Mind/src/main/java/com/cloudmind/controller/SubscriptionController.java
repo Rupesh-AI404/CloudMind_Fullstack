@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class SubscriptionController {
 
     @Autowired
     private SubscriberRepository subscriberRepository;
+
+
 
     @GetMapping("/subscription")
     public String subscription(HttpSession session, Model model) {
@@ -125,4 +128,102 @@ public class SubscriptionController {
             return "subscription";
         }
     }
+
+    @PostMapping("/subscription/upgrade")
+    public String upgradeSubscription(@RequestParam("newPlan") String newPlan,
+                                      HttpSession session,
+                                      RedirectAttributes redirectAttributes) {
+        try {
+            String userEmail = (String) session.getAttribute("email");
+
+            if (userEmail == null) {
+                redirectAttributes.addFlashAttribute("error", "Session expired. Please login again.");
+                return "redirect:/login";
+            }
+
+            // Find user's active subscription
+            List<Subscriber> activeSubscriptions = subscriberRepository.findByEmailAndStatus(userEmail, "ACTIVE");
+
+            if (activeSubscriptions.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "No active subscription found.");
+                return "redirect:/user-dashboard";
+            }
+
+            Subscriber subscription = activeSubscriptions.get(0);
+            String currentPlan = subscription.getPlan();
+
+            // Simple upgrade validation
+            if (!isValidUpgrade(currentPlan, newPlan)) {
+                redirectAttributes.addFlashAttribute("error", "Invalid upgrade path.");
+                return "redirect:/user-dashboard";
+            }
+
+            // Update the plan
+            subscription.setPlan(newPlan);
+            subscriberRepository.save(subscription);
+
+            redirectAttributes.addFlashAttribute("success",
+                    "Plan upgraded successfully to " + newPlan.toUpperCase() + "!");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to upgrade plan. Please try again.");
+        }
+
+        return "redirect:/user-dashboard";
+    }
+
+    @PostMapping("/subscription/downgrade")
+    public String downgradeSubscription(@RequestParam("newPlan") String newPlan,
+                                        HttpSession session,
+                                        RedirectAttributes redirectAttributes) {
+        try {
+            String userEmail = (String) session.getAttribute("email");
+
+            if (userEmail == null) {
+                redirectAttributes.addFlashAttribute("error", "Session expired. Please login again.");
+                return "redirect:/login";
+            }
+
+            // Find user's active subscription
+            List<Subscriber> activeSubscriptions = subscriberRepository.findByEmailAndStatus(userEmail, "ACTIVE");
+
+            if (activeSubscriptions.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "No active subscription found.");
+                return "redirect:/user-dashboard";
+            }
+
+            Subscriber subscription = activeSubscriptions.get(0);
+            String currentPlan = subscription.getPlan();
+
+            // Simple downgrade validation
+            if (!isValidDowngrade(currentPlan, newPlan)) {
+                redirectAttributes.addFlashAttribute("error", "Invalid downgrade path.");
+                return "redirect:/user-dashboard";
+            }
+
+            // Update the plan (immediate change for simplicity)
+            subscription.setPlan(newPlan);
+            subscriberRepository.save(subscription);
+
+            redirectAttributes.addFlashAttribute("success",
+                    "Plan downgraded to " + newPlan.toUpperCase() + "!");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to downgrade plan. Please try again.");
+        }
+
+        return "redirect:/user-dashboard";
+    }
+
+    // Helper methods for validation
+    private boolean isValidUpgrade(String currentPlan, String newPlan) {
+        return (currentPlan.equals("starter") && (newPlan.equals("professional") || newPlan.equals("enterprise"))) ||
+                (currentPlan.equals("professional") && newPlan.equals("enterprise"));
+    }
+
+    private boolean isValidDowngrade(String currentPlan, String newPlan) {
+        return (currentPlan.equals("enterprise") && (newPlan.equals("professional") || newPlan.equals("starter"))) ||
+                (currentPlan.equals("professional") && newPlan.equals("starter"));
+    }
+
 }

@@ -49,4 +49,27 @@ public class User {
         this.createdAt = createdAt;
     }
 
+
+    @Column(name = "username", unique = true) // Add this field
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // Constructors
+    public User() {}
+
+    public User(String username, String email, String password, String firstName, String lastName) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
 }
