@@ -80,6 +80,27 @@
             </div>
         </div>
 
+
+
+
+
+
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+
+
+
+
+
         <!-- Quick Stats -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
@@ -176,7 +197,6 @@
 
                         <!-- Current Subscription Display -->
                         <div th:if="${hasActiveSubscription and activeSubscription != null}">
-                            <h3>Your Current Subscription</h3>
 
                             <div class="subscription-card">
                                 <!-- Current Plan Display -->
@@ -218,10 +238,11 @@
                                 <div class="subscription-actions mt-4">
                                     <div class="row g-2">
                                         <!-- Show upgrade options based on current plan -->
+                                        <!-- Starter Plan Options -->
                                         <div th:if="${activeSubscription.plan == 'starter'}" class="col-12">
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <form th:action="@{/subscription/upgrade}" method="post">
+                                                    <form th:action="@{/change-plan}" method="post">
                                                         <input type="hidden" name="newPlan" value="professional">
                                                         <button type="submit" class="btn btn-success w-100">
                                                             Upgrade to Professional
@@ -229,7 +250,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-6">
-                                                    <form th:action="@{/subscription/upgrade}" method="post">
+                                                    <form th:action="@{/change-plan}" method="post">
                                                         <input type="hidden" name="newPlan" value="enterprise">
                                                         <button type="submit" class="btn btn-success w-100">
                                                             Upgrade to Enterprise
@@ -239,10 +260,11 @@
                                             </div>
                                         </div>
 
+                                        <!-- Professional Plan Options -->
                                         <div th:if="${activeSubscription.plan == 'professional'}" class="col-12">
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <form th:action="@{/subscription/upgrade}" method="post">
+                                                    <form th:action="@{/change-plan}" method="post">
                                                         <input type="hidden" name="newPlan" value="enterprise">
                                                         <button type="submit" class="btn btn-success w-100">
                                                             Upgrade to Enterprise
@@ -250,7 +272,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-6">
-                                                    <form th:action="@{/subscription/downgrade}" method="post">
+                                                    <form th:action="@{/change-plan}" method="post">
                                                         <input type="hidden" name="newPlan" value="starter">
                                                         <button type="submit" class="btn btn-outline-danger w-100">
                                                             Downgrade to Starter
@@ -260,10 +282,11 @@
                                             </div>
                                         </div>
 
+                                        <!-- Enterprise Plan Options -->
                                         <div th:if="${activeSubscription.plan == 'enterprise'}" class="col-12">
                                             <div class="row g-2">
                                                 <div class="col-6">
-                                                    <form th:action="@{/subscription/downgrade}" method="post">
+                                                    <form th:action="@{/change-plan}" method="post">
                                                         <input type="hidden" name="newPlan" value="professional">
                                                         <button type="submit" class="btn btn-outline-danger w-100">
                                                             Downgrade to Professional
@@ -271,7 +294,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="col-6">
-                                                    <form th:action="@{/subscription/downgrade}" method="post">
+                                                    <form th:action="@{/change-plan}" method="post">
                                                         <input type="hidden" name="newPlan" value="starter">
                                                         <button type="submit" class="btn btn-outline-danger w-100">
                                                             Downgrade to Starter
@@ -280,21 +303,22 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Success/Error Messages -->
-                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mt-3">
-                            <span th:text="${success}"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
+<!--                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mt-3">-->
+<!--                            <span th:text="${success}"></span>-->
+<!--                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>-->
+<!--                        </div>-->
 
-                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3">
-                            <span th:text="${error}"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
+<!--                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3">-->
+<!--                            <span th:text="${error}"></span>-->
+<!--                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>-->
+<!--                        </div>-->
 
 
 

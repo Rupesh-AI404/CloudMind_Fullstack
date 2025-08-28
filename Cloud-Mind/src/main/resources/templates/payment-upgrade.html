@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Upgrade Payment - Cloud Mind</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h4 class="mb-0"><i class="bi bi-credit-card me-2"></i>Upgrade Payment</h4>
+        </div>
+        <div class="card-body p-4">
+          <!-- Upgrade Summary -->
+          <div class="alert alert-info mb-4">
+            <h6 class="alert-heading"><i class="bi bi-arrow-up-circle me-2"></i>Upgrade Summary</h6>
+            <hr>
+            <div class="row">
+              <div class="col-6">
+                <strong>From:</strong><br>
+                <span th:text="${session.upgradeDetails?.currentPlan}" class="text-capitalize">Current Plan</span>
+              </div>
+              <div class="col-6">
+                <strong>To:</strong><br>
+                <span th:text="${session.upgradeDetails?.newPlan}" class="text-capitalize">New Plan</span>
+              </div>
+            </div>
+            <hr class="my-2">
+            <div class="text-center">
+              <h5 class="mb-0">
+                Amount to Pay: <strong class="text-success">
+                $<span th:text="${session.upgradeDetails?.upgradePrice}">0</span>
+              </strong>
+              </h5>
+              <small class="text-muted">One-time upgrade fee</small>
+            </div>
+          </div>
+
+          <!-- Payment Form -->
+          <form th:action="@{/payment/process-upgrade}" method="post">
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-credit-card me-2"></i>Card Number</label>
+              <input type="text" name="cardNumber" class="form-control"
+                     placeholder="1234 5678 9012 3456"
+                     pattern="[0-9\s]{13,19}" maxlength="19" required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label"><i class="bi bi-calendar me-2"></i>Expiry Date</label>
+                <input type="text" name="expiryDate" class="form-control"
+                       placeholder="MM/YY" pattern="[0-9]{2}/[0-9]{2}"
+                       maxlength="5" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label"><i class="bi bi-shield-lock me-2"></i>CVV</label>
+                <input type="text" name="cvv" class="form-control"
+                       placeholder="123" pattern="[0-9]{3,4}"
+                       maxlength="4" required>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="terms" required>
+                <label class="form-check-label" for="terms">
+                  I agree to the <a href="#" class="text-primary">Terms & Conditions</a>
+                </label>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success btn-lg">
+                <i class="bi bi-lock me-2"></i>
+                Pay $<span th:text="${session.upgradeDetails?.upgradePrice}">0</span> Now
+              </button>
+              <a th:href="@{/user-dashboard}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Cancel
+              </a>
+            </div>
+          </form>
+
+          <!-- Security Notice -->
+          <div class="mt-4 p-3 bg-light rounded">
+            <small class="text-muted">
+              <i class="bi bi-shield-check text-success me-2"></i>
+              Your payment information is secure and encrypted.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Card number formatting -->
+<script>
+  document.querySelector('input[name="cardNumber"]').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+    e.target.value = formattedValue;
+  });
+
+  document.querySelector('input[name="expiryDate"]').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+      e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    } else {
+      e.target.value = value;
+    }
+  });
+</script>
+</body>
+</html>

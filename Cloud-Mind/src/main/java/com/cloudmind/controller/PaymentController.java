@@ -13,19 +13,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class PaymentController {
 
     private final SubscriberRepository repo;
     private final EmailService emailService;
+    private final com.cloudmind.controller.SubscriberRepository subscriberRepository;
 
     @Value("${app.hash-salt:cmind-default-salt-change-me}")
     private String hashSalt;
 
-    public PaymentController(SubscriberRepository repo, EmailService emailService) {
+    public PaymentController(SubscriberRepository repo, EmailService emailService, com.cloudmind.controller.SubscriberRepository subscriberRepository) {
         this.repo = repo;
         this.emailService = emailService;
+        this.subscriberRepository = subscriberRepository;
     }
 
     @GetMapping("/payment")
@@ -253,5 +257,44 @@ public class PaymentController {
 
         String masked = "*".repeat(digits.length() - 4) + digits.substring(digits.length() - 4);
         return masked;
+    }
+
+
+
+    @PostMapping("/process-upgrade")
+    public String processUpgradePayment(HttpSession session, RedirectAttributes redirectAttributes) {
+        try {
+            Map<String, Object> upgradeDetails = (Map<String, Object>) session.getAttribute("upgradeDetails");
+
+            if (upgradeDetails == null) {
+                redirectAttributes.addFlashAttribute("error", "Upgrade session expired");
+                return "redirect:/user-dashboard";
+            }
+
+            // Update the subscription plan
+            Long subscriptionId = (Long) upgradeDetails.get("subscriptionId");
+            String newPlan = (String) upgradeDetails.get("newPlan");
+
+            Optional<Subscriber> subOpt = subscriberRepository.findById(subscriptionId);
+            if (subOpt.isPresent()) {
+                Subscriber subscription = subOpt.get();
+                subscription.setPlan(newPlan);
+                subscriberRepository.save(subscription);
+
+                // Clear upgrade session data
+                session.removeAttribute("upgradeDetails");
+
+                redirectAttributes.addFlashAttribute("success",
+                        "🎉 Payment successful! Your plan has been upgraded to " + newPlan.toUpperCase());
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Subscription not found");
+            }
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Payment processing error: " + e.getMessage());
+            return "redirect:/upgrade-payment/upgrade";
+        }
+
+        return "redirect:/user-dashboard";
     }
 }
