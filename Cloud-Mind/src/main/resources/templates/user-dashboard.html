@@ -197,14 +197,12 @@
 
                         <!-- Current Subscription Display -->
                         <div th:if="${hasActiveSubscription and activeSubscription != null}">
-
                             <div class="subscription-card">
                                 <!-- Current Plan Display -->
                                 <div class="subscription-header">
                                     <div class="plan-badge">
                                         <span th:text="${#strings.toUpperCase(activeSubscription.plan)}" class="plan-name">STARTER</span>
-                                        <span th:class="${activeSubscription.status == 'ACTIVE' ? 'badge bg-success' : 'badge bg-danger'}"
-                                              th:text="${activeSubscription.status}">ACTIVE</span>
+                                        <span class="badge bg-success">ACTIVE</span>
                                     </div>
                                 </div>
 
@@ -213,101 +211,172 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="info-item">
-                                                <strong>Plan Type:</strong>
-                                                <span th:text="${#strings.capitalizeWords(activeSubscription.plan)}">Starter</span>
+                                                <small class="text-muted">Plan Type</small>
+                                                <div class="fw-bold text-capitalize" th:text="${activeSubscription.plan}">Starter</div>
                                             </div>
                                             <div class="info-item">
-                                                <strong>Billing:</strong>
-                                                <span th:text="${#strings.capitalizeWords(activeSubscription.billing)}">Monthly</span>
+                                                <small class="text-muted">Billing</small>
+                                                <div class="fw-bold text-capitalize" th:text="${activeSubscription.billing}">Monthly</div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="info-item">
-                                                <strong>Started:</strong>
-                                                <span th:text="${#temporals.format(activeSubscription.subscriptionDate, 'MMM dd, yyyy')}">Jan 15, 2024</span>
+                                                <small class="text-muted">Payment Method</small>
+                                                <div class="fw-bold text-capitalize" th:text="${activeSubscription.paymentMethod}">Stripe</div>
                                             </div>
                                             <div class="info-item">
-                                                <strong>Status:</strong>
-                                                <span th:text="${activeSubscription.status}">Active</span>
+                                                <small class="text-muted">Start Date</small>
+                                                <div class="fw-bold" th:text="${subscriptionDate ?: 'Recently purchased'}">Jan 15, 2025</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Upgrade/Downgrade Buttons -->
+                                <!-- Action Buttons -->
                                 <div class="subscription-actions mt-4">
                                     <div class="row g-2">
-                                        <!-- Show upgrade options based on current plan -->
-                                        <!-- Starter Plan Options -->
-                                        <div th:if="${activeSubscription.plan == 'starter'}" class="col-12">
-                                            <div class="row g-2">
-                                                <div class="col-6">
-                                                    <form th:action="@{/change-plan}" method="post">
-                                                        <input type="hidden" name="newPlan" value="professional">
-                                                        <button type="submit" class="btn btn-success w-100">
-                                                            Upgrade to Professional
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                <div class="col-6">
-                                                    <form th:action="@{/change-plan}" method="post">
-                                                        <input type="hidden" name="newPlan" value="enterprise">
-                                                        <button type="submit" class="btn btn-success w-100">
-                                                            Upgrade to Enterprise
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <a th:href="@{/subscription}" class="btn btn-outline-primary w-100">
+                                                <i class="bi bi-arrow-up-circle me-1"></i>Upgrade Plan
+                                            </a>
                                         </div>
-
-                                        <!-- Professional Plan Options -->
-                                        <div th:if="${activeSubscription.plan == 'professional'}" class="col-12">
-                                            <div class="row g-2">
-                                                <div class="col-6">
-                                                    <form th:action="@{/change-plan}" method="post">
-                                                        <input type="hidden" name="newPlan" value="enterprise">
-                                                        <button type="submit" class="btn btn-success w-100">
-                                                            Upgrade to Enterprise
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                <div class="col-6">
-                                                    <form th:action="@{/change-plan}" method="post">
-                                                        <input type="hidden" name="newPlan" value="starter">
-                                                        <button type="submit" class="btn btn-outline-danger w-100">
-                                                            Downgrade to Starter
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-outline-danger w-100">
+                                                <i class="bi bi-x-circle me-1"></i>Cancel
+                                            </button>
                                         </div>
-
-                                        <!-- Enterprise Plan Options -->
-                                        <div th:if="${activeSubscription.plan == 'enterprise'}" class="col-12">
-                                            <div class="row g-2">
-                                                <div class="col-6">
-                                                    <form th:action="@{/change-plan}" method="post">
-                                                        <input type="hidden" name="newPlan" value="professional">
-                                                        <button type="submit" class="btn btn-outline-danger w-100">
-                                                            Downgrade to Professional
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                <div class="col-6">
-                                                    <form th:action="@{/change-plan}" method="post">
-                                                        <input type="hidden" name="newPlan" value="starter">
-                                                        <button type="submit" class="btn btn-outline-danger w-100">
-                                                            Downgrade to Starter
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- No Subscription State -->
+                        <div th:if="${!hasActiveSubscription or activeSubscription == null}" class="no-subscription-card">
+                            <div class="text-center py-5">
+                                <div class="no-subscription-icon mb-3">
+                                    <i class="bi bi-credit-card-2-front" style="font-size: 3rem; color: #6c757d;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">No Active Subscription</h5>
+                                <p class="text-muted mb-4">You don't have an active subscription yet. Choose a plan to get started with our services.</p>
+                                <a th:href="@{/subscription}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Choose a Plan
+                                </a>
+                            </div>
+                        </div>
+
+
+<!--                        <div th:if="${hasActiveSubscription and activeSubscription != null}">-->
+
+<!--                            <div class="subscription-card">-->
+<!--                                &lt;!&ndash; Current Plan Display &ndash;&gt;-->
+<!--                                <div class="subscription-header">-->
+<!--                                    <div class="plan-badge">-->
+<!--                                        <span th:text="${#strings.toUpperCase(activeSubscription.plan)}" class="plan-name">STARTER</span>-->
+<!--                                        <span th:class="${activeSubscription.status == 'ACTIVE' ? 'badge bg-success' : 'badge bg-danger'}"-->
+<!--                                              th:text="${activeSubscription.status}">ACTIVE</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Plan Details &ndash;&gt;-->
+<!--                                <div class="subscription-body">-->
+<!--                                    <div class="row g-3">-->
+<!--                                        <div class="col-md-6">-->
+<!--                                            <div class="info-item">-->
+<!--                                                <strong>Plan Type:</strong>-->
+<!--                                                <span th:text="${#strings.capitalizeWords(activeSubscription.plan)}">Starter</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="info-item">-->
+<!--                                                <strong>Billing:</strong>-->
+<!--                                                <span th:text="${#strings.capitalizeWords(activeSubscription.billing)}">Monthly</span>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-md-6">-->
+<!--                                            <div class="info-item">-->
+<!--                                                <strong>Started:</strong>-->
+<!--                                                <span th:text="${#temporals.format(activeSubscription.subscriptionDate, 'MMM dd, yyyy')}">Jan 15, 2024</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="info-item">-->
+<!--                                                <strong>Status:</strong>-->
+<!--                                                <span th:text="${activeSubscription.status}">Active</span>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Upgrade/Downgrade Buttons &ndash;&gt;-->
+<!--                                <div class="subscription-actions mt-4">-->
+<!--                                    <div class="row g-2">-->
+<!--                                        &lt;!&ndash; Show upgrade options based on current plan &ndash;&gt;-->
+<!--                                        &lt;!&ndash; Starter Plan Options &ndash;&gt;-->
+<!--                                        <div th:if="${activeSubscription.plan == 'starter'}" class="col-12">-->
+<!--                                            <div class="row g-2">-->
+<!--                                                <div class="col-6">-->
+<!--                                                    <form th:action="@{/change-plan}" method="post">-->
+<!--                                                        <input type="hidden" name="newPlan" value="professional">-->
+<!--                                                        <button type="submit" class="btn btn-success w-100">-->
+<!--                                                            Upgrade to Professional-->
+<!--                                                        </button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                                <div class="col-6">-->
+<!--                                                    <form th:action="@{/change-plan}" method="post">-->
+<!--                                                        <input type="hidden" name="newPlan" value="enterprise">-->
+<!--                                                        <button type="submit" class="btn btn-success w-100">-->
+<!--                                                            Upgrade to Enterprise-->
+<!--                                                        </button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+
+<!--                                        &lt;!&ndash; Professional Plan Options &ndash;&gt;-->
+<!--                                        <div th:if="${activeSubscription.plan == 'professional'}" class="col-12">-->
+<!--                                            <div class="row g-2">-->
+<!--                                                <div class="col-6">-->
+<!--                                                    <form th:action="@{/change-plan}" method="post">-->
+<!--                                                        <input type="hidden" name="newPlan" value="enterprise">-->
+<!--                                                        <button type="submit" class="btn btn-success w-100">-->
+<!--                                                            Upgrade to Enterprise-->
+<!--                                                        </button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                                <div class="col-6">-->
+<!--                                                    <form th:action="@{/change-plan}" method="post">-->
+<!--                                                        <input type="hidden" name="newPlan" value="starter">-->
+<!--                                                        <button type="submit" class="btn btn-outline-danger w-100">-->
+<!--                                                            Downgrade to Starter-->
+<!--                                                        </button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+
+<!--                                        &lt;!&ndash; Enterprise Plan Options &ndash;&gt;-->
+<!--                                        <div th:if="${activeSubscription.plan == 'enterprise'}" class="col-12">-->
+<!--                                            <div class="row g-2">-->
+<!--                                                <div class="col-6">-->
+<!--                                                    <form th:action="@{/change-plan}" method="post">-->
+<!--                                                        <input type="hidden" name="newPlan" value="professional">-->
+<!--                                                        <button type="submit" class="btn btn-outline-danger w-100">-->
+<!--                                                            Downgrade to Professional-->
+<!--                                                        </button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                                <div class="col-6">-->
+<!--                                                    <form th:action="@{/change-plan}" method="post">-->
+<!--                                                        <input type="hidden" name="newPlan" value="starter">-->
+<!--                                                        <button type="submit" class="btn btn-outline-danger w-100">-->
+<!--                                                            Downgrade to Starter-->
+<!--                                                        </button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <!-- Success/Error Messages -->
 <!--                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mt-3">-->
@@ -322,7 +391,7 @@
 
 
 
-                        <!-- No Subscription State -->
+                        <!-- No Subscription State
                         <div th:if="${subscriptions == null or subscriptions.empty}" class="no-subscription-card">
                             <div class="text-center py-5">
                                 <div class="no-subscription-icon mb-3">
@@ -335,7 +404,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div>  -->
 
                     <!-- Active Subscription State (Hidden by default) -->
                     <div id="activeSubscriptionState" class="d-none">
@@ -583,7 +652,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div></div>
 </main>
 
 </div>

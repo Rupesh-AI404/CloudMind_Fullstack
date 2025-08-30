@@ -12,41 +12,6 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!--&lt;!&ndash; Navigation &ndash;&gt;-->
-<!--<nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">-->
-<!--    <div class="container">-->
-<!--        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">-->
-<!--            <img src="/Images/logoF.png" th:src="@{/Images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />-->
-<!--        </a>-->
-<!--        <div class="d-flex align-items-center order-lg-3">-->
-<!--            <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">-->
-<!--                <i class="bi bi-sun-fill" id="lightIcon"></i>-->
-<!--                <i class="bi bi-moon-fill d-none" id="darkIcon"></i>-->
-<!--            </button>-->
-<!--            <div th:if="${activeUser == null}">-->
-<!--                <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>-->
-<!--                <a th:href="@{/signup}" class="btn btn-primary me-3">Signup</a>-->
-<!--            </div>-->
-<!--            <div th:if="${activeUser != null}" class="d-flex align-items-center">-->
-<!--                <span class="me-3 text-white">Welcome, <span th:text="${activeUser}"></span></span>-->
-<!--                <a th:href="@{/logout}" class="btn btn-danger">Logout</a>-->
-<!--            </div>-->
-<!--            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">-->
-<!--                <span class="navbar-toggler-icon"></span>-->
-<!--            </button>-->
-<!--        </div>-->
-<!--        <div class="collapse navbar-collapse order-lg-2" id="navbarNav">-->
-<!--            <ul class="navbar-nav mx-auto">-->
-<!--                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" th:href="@{/services}">Services</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" th:href="@{/pricing}">Pricing</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" th:href="@{/contact}">Contact</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</nav>-->
-
 <section class="py-5" style="margin-top: 80px;">
     <div class="container">
         <div class="row justify-content-center">
@@ -130,19 +95,22 @@
                             <h6 class="fw-bold mb-3">Order Summary</h6>
                             <div class="d-flex justify-content-between mb-2">
                                 <span th:text="${selectedPlan} ?: 'Professional Plan'"></span>
-                                <span th:with="price=${selectedPlan == 'starter' ? 999 : selectedPlan == 'professional' ? 2499 : 4999}">
-                                     $<span th:text="${price}"></span>.00
-                                </span>
+                                <span th:with="price=${selectedPlan == 'starter' ? 999 : (selectedPlan == 'professional' ? 2499 : 4999)}">
+         $<span th:text="${price}"></span>.00
+    </span>
                             </div>
                             <div class="d-flex justify-content-between mb-2" th:if="${selectedBilling == 'annually'}" id="discountRow" style="display: none;">
                                 <span>Annual Discount (20%)</span>
-                                <span class="text-success" th:with="discount=${selectedPlan == 'starter' ? 199.80 : selectedPlan == 'professional' ? 499.80 : 999.80}">-$<span th:text="${discount}"></span></span>
+                                <span class="text-success" th:with="discount=${selectedPlan == 'starter' ? 199.80 : (selectedPlan == 'professional' ? 499.80 : 999.80)}">
+        -$<span th:text="${discount}"></span>
+    </span>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between fw-bold">
-                                <span th:text="'Total (' + (selectedBilling ?: 'Monthly') + ')'"></span>
-                                <span th:with="total=${selectedBilling == 'annually' ? (selectedPlan == 'starter' ? 799.20 : selectedPlan == 'professional' ? 1999.20 : 3999.20) : (selectedPlan == 'starter' ? 999.00 : selectedPlan == 'professional' ? 2499.00 : 4999.00)}">
-            $<span th:text="${total}"></span>.00</span>
+                                <span th:text="'Total (' + (${selectedBilling} ?: 'Monthly') + ')'"></span>
+                                <span th:with="total=${selectedBilling == 'annually' ? (selectedPlan == 'starter' ? 799.20 : (selectedPlan == 'professional' ? 1999.20 : 3999.20)) : (selectedPlan == 'starter' ? 999.00 : (selectedPlan == 'professional' ? 2499.00 : 4999.00))}">
+        $<span th:text="${total}"></span>.00
+    </span>
                             </div>
                         </div>
                         <div class="d-flex gap-3">
@@ -154,26 +122,94 @@
 
                     <!-- Success Modal -->
 
+                    <!-- Add this modal to your payment-success.html -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+                    <!-- Success Modal -->
                     <div class="modal fade" id="paymentSuccessModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content text-center p-4">
-                                <div class="mb-3">
-                                    <i class="bi bi-check-circle-fill text-success" style="font-size:3rem;"></i>
-                                </div>
-                                <h4 class="fw-bold mb-2">Payment Successful!</h4>
-                                <p class="text-muted mb-3">
-                                    You subscribed to <strong th:text="${selectedPlan}">Professional Plan</strong>
-                                    using <strong th:text="${paymentMethod}">eSewa</strong>.
-                                    You'll be redirected to your dashboard shortly.
-                                </p>
-                                <div class="spinner-border text-success" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                            <div class="modal-content border-0 shadow-lg">
+                                <div class="modal-body text-center p-5">
+                                    <!-- Success Icon -->
+                                    <div class="mb-4">
+                                        <div class="success-icon mx-auto">
+                                            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Success Message -->
+                                    <h3 class="text-success fw-bold mb-3">Payment Successful!</h3>
+                                    <p class="lead mb-4">Thank you for your payment!</p>
+
+                                    <!-- Payment Details -->
+                                    <div class="bg-light rounded p-3 mb-4">
+                                        <div class="row text-start">
+                                            <div class="col-6">
+                                                <small class="text-muted">Plan:</small><br>
+                                                <strong th:text="${selectedPlan}">Professional</strong>
+                                            </div>
+                                            <div class="col-6">
+                                                <small class="text-muted">Billing:</small><br>
+                                                <strong th:text="${selectedBilling}">Monthly</strong>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2">
+                                        <div class="row text-start">
+                                            <div class="col-6">
+                                                <small class="text-muted">Payment Method:</small><br>
+                                                <strong th:text="${paymentMethod}">Stripe</strong>
+                                            </div>
+                                            <div class="col-6">
+                                                <small class="text-muted">Email:</small><br>
+                                                <strong th:text="${userEmail}">user@example.com</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Redirect Message -->
+                                    <div class="alert alert-info d-flex align-items-center">
+                                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span>Redirecting to dashboard in <span id="countdown">5</span> seconds...</span>
+                                    </div>
+
+                                    <!-- Action Button -->
+                                    <button type="button" class="btn btn-primary btn-lg" onclick="goToDashboard()">
+                                        <i class="bi bi-house-door-fill me-2"></i>Go to Dashboard
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Add some custom CSS for the success icon animation -->
+                    <style>
+                        .success-icon {
+                            animation: bounceIn 0.6s ease-out;
+                        }
 
+                        @keyframes bounceIn {
+                            0% {
+                                transform: scale(0.3);
+                                opacity: 0;
+                            }
+                            50% {
+                                transform: scale(1.05);
+                            }
+                            70% {
+                                transform: scale(0.9);
+                            }
+                            100% {
+                                transform: scale(1);
+                                opacity: 1;
+                            }
+                        }
+
+                        .modal-content {
+                            border-radius: 15px !important;
+                        }
+                    </style>
 
 
 
@@ -217,26 +253,9 @@
 <!--        });-->
 <!--</script>-->
 
-<script th:if="${success}">
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'));
-        modal.show();
-
-        // Auto-redirect after 3s
-        setTimeout(function() {
-            window.location.href = '/user-dashboard';
-        }, 3000);
-    });
-</script>
-
-
-
-<script th:src="@{/js/auth.js}"></script>
-<script th:src="@{/js/script.js}"></script>
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Form submission handling
         const paymentForm = document.getElementById('paymentForm');
         const paymentDetails = document.getElementById('paymentDetails');
         const cardPayment = document.getElementById('cardPayment');
@@ -249,6 +268,7 @@
             fields.forEach(f => { if (f) f.required = required; });
         }
 
+        // Payment method selection
         document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 paymentDetails.style.display = 'block';
@@ -262,13 +282,114 @@
             });
         });
 
-        paymentForm.addEventListener('submit', function(e) {
-            if (!document.querySelector('input[name="paymentMethod"]:checked')) {
-                e.preventDefault();
-                alert('Please select a payment method.');
+        // Form submission handling
+        if (paymentForm) {
+            paymentForm.addEventListener('submit', function(e) {
+                if (!document.querySelector('input[name="paymentMethod"]:checked')) {
+                    e.preventDefault();
+                    alert('Please select a payment method.');
+                    return;
+                }
+
+                // Show processing state
+                const submitBtn = document.getElementById('payNowBtn');
+                if (submitBtn) {
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Processing...';
+                    submitBtn.disabled = true;
+                }
+            });
+        }
+
+        // Card number formatting
+        const cardNumberInput = document.getElementById('cardNumber');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                if (formattedValue.length <= 19) {
+                    e.target.value = formattedValue;
+                }
+            });
+        }
+
+        // Expiry date formatting
+        const expiryInput = document.getElementById('expiryDate');
+        if (expiryInput) {
+            expiryInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+    });
+
+    // Success modal script - only runs when paymentSuccess flag is set
+    function goToDashboard() {
+        window.location.href = '/user-dashboard';
+    }
+
+    let countdownInterval;
+
+    function startCountdown() {
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+
+        countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
             }
+
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                goToDashboard();
+            }
+        }, 1000);
+    }
+</script>
+
+<!-- Success modal trigger script - only runs when success flag is set -->
+<script th:if="${paymentSuccess}">
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Payment successful - showing modal');
+
+        // Show the success modal
+        const modal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'), {
+            backdrop: 'static',
+            keyboard: false
         });
+        modal.show();
+
+        // Start countdown
+        startCountdown();
     });
 </script>
+
+<!-- Success modal script - only runs when success flag is set -->
+<script th:if="${success}">
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Payment successful - showing modal');
+
+        // Show the success modal
+        const modal = new bootstrap.Modal(document.getElementById('paymentSuccessModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        modal.show();
+
+        // Auto-redirect after 3 seconds
+        setTimeout(function() {
+            console.log('Redirecting to dashboard');
+            window.location.href = '/user-dashboard';
+        }, 2000);
+    });
+</script>
+
+
+<script th:src="@{/js/auth.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
 </body>
 </html>
