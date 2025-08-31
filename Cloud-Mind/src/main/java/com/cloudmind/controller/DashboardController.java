@@ -3,16 +3,16 @@ package com.cloudmind.controller;
 import com.cloudmind.model.Subscriber;
 import com.cloudmind.model.User;
 import com.cloudmind.repository.SubscriberRepository;
+import com.cloudmind.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -20,6 +20,10 @@ public class DashboardController {
 
     @Autowired
     private SubscriberRepository repo;
+
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/user-dashboard")
     public String userDashboard(HttpSession session, Model model) {
@@ -107,18 +111,72 @@ public class DashboardController {
             return "redirect:/login";
         }
 
-        model.addAttribute("activeUser", session.getAttribute("activeUser"));
-        model.addAttribute("email", session.getAttribute("email"));
-        model.addAttribute("userRole", session.getAttribute("userRole"));
+        try {
+            System.out.println("=== LOADING ADMIN DASHBOARD ===");
+
+            // Get all subscribers from database
+            List<Subscriber> subscribers = repo.findAll();
+            long totalUsers = userRepository.count();
+            long totalSubscribers = subscribers.size();
+
+            System.out.println("Found " + totalSubscribers + " subscribers in database");
+            System.out.println("Found " + totalUsers + " total users in database");
+
+            // Calculate revenue
+            BigDecimal totalRevenue = calculateTotalRevenue(subscribers);
+            BigDecimal monthlyRevenue = calculateMonthlyRevenue(subscribers);
+
+            // Calculate conversion rate
+            double conversionRate = totalUsers > 0 ? (double) totalSubscribers / totalUsers * 100 : 0;
+
+            // Get package distribution
+            Map<String, Long> packageDistribution = getPackageDistribution(subscribers);
+
+            // Add session attributes
+            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("userRole", session.getAttribute("userRole"));
+
+            // Add dashboard data
+            model.addAttribute("totalUsers", totalUsers);
+            model.addAttribute("activeCampaigns", totalSubscribers);
+            model.addAttribute("totalRevenue", totalRevenue);
+            model.addAttribute("conversionRate", Math.round(conversionRate * 100.0) / 100.0);
+            model.addAttribute("subscribers", subscribers);
+            model.addAttribute("packageDistribution", packageDistribution);
+            model.addAttribute("monthlyRevenue", monthlyRevenue);
+
+            System.out.println("✅ Dashboard data loaded successfully");
+            System.out.println("   - Total Users: " + totalUsers);
+            System.out.println("   - Total Subscribers: " + totalSubscribers);
+            System.out.println("   - Total Revenue: $" + totalRevenue);
+
+        } catch (Exception e) {
+            System.out.println("❌ Error loading admin dashboard: " + e.getMessage());
+            e.printStackTrace();
+
+            // Add session attributes even on error
+            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("userRole", session.getAttribute("userRole"));
+
+            // Add empty data
+            model.addAttribute("totalUsers", 0L);
+            model.addAttribute("activeCampaigns", 0L);
+            model.addAttribute("totalRevenue", BigDecimal.ZERO);
+            model.addAttribute("conversionRate", 0.0);
+            model.addAttribute("subscribers", new ArrayList<>());
+            model.addAttribute("packageDistribution", getEmptyPackageDistribution());
+            model.addAttribute("monthlyRevenue", BigDecimal.ZERO);
+            model.addAttribute("error", "Error loading dashboard: " + e.getMessage());
+        }
 
         return "admin-dashboard";
     }
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session) {
-        // Redirect based on user role
         String userRole = (String) session.getAttribute("userRole");
-
         if ("ADMIN".equals(userRole)) {
             return "redirect:/admin-dashboard";
         } else {
@@ -126,5 +184,97 @@ public class DashboardController {
         }
     }
 
+    // Add debug endpoint
+    @GetMapping("/admin/debug")
+    @ResponseBody
+    public String debugInfo() {
+        StringBuilder debug = new StringBuilder();
+        debug.append("=== ADMIN DASHBOARD DEBUG ===\n\n");
 
+        try {
+            List<Subscriber> subscribers = repo.findAll();
+            debug.append("Direct repository call - Subscribers found: ").append(subscribers.size()).append("\n\n");
+
+            if (!subscribers.isEmpty()) {
+                debug.append("Subscriber details:\n");
+                for (int i = 0; i < Math.min(subscribers.size(), 3); i++) {
+                    Subscriber s = subscribers.get(i);
+                    debug.append("Subscriber ").append(i + 1).append(":\n");
+                    debug.append("  - ID: ").append(s.getId()).append("\n");
+                    debug.append("  - Email: ").append(s.getEmail()).append("\n");
+                    debug.append("  - Plan: ").append(s.getPlan()).append("\n");
+                    debug.append("  - Status: ").append(s.getStatus()).append("\n");
+                    debug.append("  - First Name: ").append(s.getFirstName()).append("\n");
+                    debug.append("  - Last Name: ").append(s.getLastName()).append("\n");
+                    debug.append("  ---\n");
+                }
+            } else {
+                debug.append("❌ NO SUBSCRIBERS FOUND!\n");
+            }
+
+            long totalUsers = userRepository.count();
+            debug.append("\nTotal users in database: ").append(totalUsers).append("\n");
+
+        } catch (Exception e) {
+            debug.append("ERROR: ").append(e.getMessage()).append("\n");
+            debug.append("Stack trace: ").append(Arrays.toString(e.getStackTrace()));
+        }
+
+        return debug.toString();
+    }
+
+    // Helper methods for calculations
+    private BigDecimal calculateTotalRevenue(List<Subscriber> subscribers) {
+        return subscribers.stream()
+                .map(this::getSubscriberRevenue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal calculateMonthlyRevenue(List<Subscriber> subscribers) {
+        return subscribers.stream()
+                .filter(s -> "monthly".equalsIgnoreCase(s.getBilling()))
+                .map(this::getSubscriberRevenue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getSubscriberRevenue(Subscriber subscriber) {
+        String plan = subscriber.getPlan();
+        if (plan == null) return BigDecimal.ZERO;
+
+        switch (plan.toLowerCase()) {
+            case "starter":
+                return new BigDecimal("999");
+            case "pro":
+                return new BigDecimal("2499");
+            case "enterprise":
+                return new BigDecimal("4999");
+            default:
+                return BigDecimal.ZERO;
+        }
+    }
+
+    private Map<String, Long> getPackageDistribution(List<Subscriber> subscribers) {
+        Map<String, Long> planCounts = new HashMap<>();
+        planCounts.put("starter", 0L);
+        planCounts.put("pro", 0L);
+        planCounts.put("enterprise", 0L);
+
+        for (Subscriber subscriber : subscribers) {
+            String plan = subscriber.getPlan();
+            if (plan != null) {
+                planCounts.put(plan.toLowerCase(),
+                        planCounts.getOrDefault(plan.toLowerCase(), 0L) + 1);
+            }
+        }
+
+        return planCounts;
+    }
+
+    private Map<String, Long> getEmptyPackageDistribution() {
+        Map<String, Long> distribution = new HashMap<>();
+        distribution.put("starter", 0L);
+        distribution.put("pro", 0L);
+        distribution.put("enterprise", 0L);
+        return distribution;
+    }
 }

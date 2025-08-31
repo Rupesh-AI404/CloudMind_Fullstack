@@ -180,4 +180,15 @@ public class Subscriber {
     public void setWebsite(String website) { this.website = website; }
 
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
 }
