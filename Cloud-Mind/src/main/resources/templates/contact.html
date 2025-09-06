@@ -18,56 +18,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<!--     Navigation -->
-<!--    <nav class="navbar navbar-expand-lg navbar-light fixed-top glass-nav">-->
-<!--        <div class="container">-->
-<!--            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">-->
-<!--                <img th:src="@{/images/logoF.png}" alt="Logo" style="height: 110px; width: auto;" class="me-2" />-->
-<!--            </a>-->
-<!--            -->
-<!--            <div class="d-flex align-items-center order-lg-3">-->
-<!--                &lt;!&ndash; Theme Toggle &ndash;&gt;-->
-<!--                <button class="btn btn-outline-secondary me-3 theme-toggle" id="themeToggle" aria-label="Toggle theme">-->
-<!--                    <i class="bi bi-sun-fill" id="lightIcon"></i>-->
-<!--                    <i class="bi bi-moon-fill d-none" id="darkIcon"></i>-->
-<!--                </button>-->
-<!--                -->
-<!--                &lt;!&ndash; CTA Button &ndash;&gt;-->
-<!--                <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>-->
-<!--                <a th:href="@{/signup}" class="btn btn-primary me-3">Signup</a>-->
-<!--                -->
-<!--                &lt;!&ndash; Mobile Toggle &ndash;&gt;-->
-<!--                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">-->
-<!--                    <span class="navbar-toggler-icon"></span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            -->
-<!--            <div class="collapse navbar-collapse order-lg-2" id="navbarNav">-->
-<!--                <ul class="navbar-nav mx-auto">-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/}">Home</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/about}">About</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/services}">Services</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link" th:href="@{/pricing}">Pricing</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link active" th:href="@{/contact}">Contact</a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--                -->
-<!--                &lt;!&ndash; Mobile CTA &ndash;&gt;-->
-<!--                <div class="d-lg-none mt-3">-->
-<!--                    <a th:href="@{/subscription}" class="btn btn-gradient w-100">Get Started</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </nav>  -->
+
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
@@ -90,6 +41,7 @@
         </div>
     </section>
 
+
     <!-- Contact Content -->
     <section class="py-5">
         <div class="container">
@@ -105,7 +57,7 @@
                                 </div>
                                 <div>
                                     <h6 class="mb-1">Email</h6>
-                                    <p class="text-muted mb-0">cloudmind45@gmail.com</p>
+                                    <p class="text-muted mb-0">sabiraventures1@gmail.com</p>
                                 </div>
                             </div>
                         </div>
@@ -150,35 +102,55 @@
                     </div>
                 </div>
 
+
+                <!-- Contact Form -->
                 <!-- Contact Form -->
                 <div class="col-lg-6">
                     <div class="glass-card p-4">
                         <h5 class="fw-bold mb-4">Send us a Message</h5>
-                        <form id="contactForm">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" required>
+
+                        <!-- Success/Error Messages -->
+                        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill me-3"></i>
+                                <div>
+                                    <strong>Success!</strong> <span th:text="${successMessage}">Message sent successfully!</span>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-3"></i>
+                                <div>
+                                    <strong>Error!</strong> <span th:text="${errorMessage}">Something went wrong!</span>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="tel" class="form-control" id="phone">
-                                </div>
-                                <div class="col-12">
-                                    <label for="company" class="form-label">Company</label>
-                                    <input type="text" class="form-control" id="company">
-                                </div>
-                                <div class="col-12">
-                                    <label for="service" class="form-label">Service Interest</label>
-                                    <select class="form-select" id="service" required>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Make sure your form fields match the model exactly -->
+                        <form th:action="@{/contact}" method="post" th:object="${contactMessage}">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" th:field="*{name}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <input type="text" class="form-control" id="subject" name="subject" th:field="*{subject}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select class="form-select" id="priority" name="priority" th:field="*{priority}">
+
                                         <option value="">Select a service</option>
                                         <option value="seo">SEO Optimization</option>
                                         <option value="social-media">Social Media Marketing</option>
@@ -187,26 +159,18 @@
                                         <option value="ppc">PPC Advertising</option>
                                         <option value="analytics">Analytics & Reporting</option>
                                         <option value="all">All Services</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label for="budget" class="form-label">Budget Range</label>
-                                    <select class="form-select" id="budget">
-                                        <option value="">Select budget range</option>
-                                        <option value="under-1000">Under $1,000/month</option>
-                                        <option value="1000-2500">$1,000 - $2,500/month</option>
-                                        <option value="2500-5000">$2,500 - $5,000/month</option>
-                                        <option value="over-5000">Over $5,000/month</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label for="message" class="form-label">Message</label>
-                                    <textarea class="form-control" id="message" rows="4" placeholder="Tell us about your project and goals..." required></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-gradient w-100">Send Message</button>
-                                </div>
+
+                                </select>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message *</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" th:field="*{message}" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send me-2"></i>Send Message
+                            </button>
                         </form>
                     </div>
                 </div>

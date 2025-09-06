@@ -1,5 +1,6 @@
 package com.cloudmind.controller;
 
+import com.cloudmind.model.ContactMessage;
 import com.cloudmind.model.Subscriber;
 import com.cloudmind.model.User;
 import com.cloudmind.repository.SubscriberRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.cloudmind.repository.ContactMessageRepository;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -24,6 +26,10 @@ public class DashboardController {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private ContactMessageRepository contactRepo;
 
     @GetMapping("/user-dashboard")
     public String userDashboard(HttpSession session, Model model) {
@@ -125,12 +131,24 @@ public class DashboardController {
             // Calculate revenue
             BigDecimal totalRevenue = calculateTotalRevenue(subscribers);
             BigDecimal monthlyRevenue = calculateMonthlyRevenue(subscribers);
+            double conversionRate = totalUsers > 0 ? (double) totalSubscribers / totalUsers * 100 : 0;
+            Map<String, Long> packageDistribution = getPackageDistribution(subscribers);
+
+
+            // Add contact messages data
+            List<ContactMessage> allMessages = contactRepo.findAllByOrderByCreatedAtDesc();
+            List<ContactMessage> unreadMessages = contactRepo.findByIsReadFalseOrderByCreatedAtDesc();
+            long totalMessages = allMessages.size();
+            long unreadCount = unreadMessages.size();
+
+            System.out.println("Found " + totalMessages + " total contact messages");
+            System.out.println("Found " + unreadCount + " unread contact messages");
 
             // Calculate conversion rate
-            double conversionRate = totalUsers > 0 ? (double) totalSubscribers / totalUsers * 100 : 0;
-
-            // Get package distribution
-            Map<String, Long> packageDistribution = getPackageDistribution(subscribers);
+//            double conversionRate = totalUsers > 0 ? (double) totalSubscribers / totalUsers * 100 : 0;
+//
+//            // Get package distribution
+//            Map<String, Long> packageDistribution = getPackageDistribution(subscribers);
 
             // Add session attributes
             model.addAttribute("activeUser", session.getAttribute("activeUser"));
@@ -138,6 +156,9 @@ public class DashboardController {
             model.addAttribute("userRole", session.getAttribute("userRole"));
 
             // Add dashboard data
+            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("userRole", session.getAttribute("userRole"));
             model.addAttribute("totalUsers", totalUsers);
             model.addAttribute("activeCampaigns", totalSubscribers);
             model.addAttribute("totalRevenue", totalRevenue);
@@ -151,16 +172,22 @@ public class DashboardController {
             System.out.println("   - Total Subscribers: " + totalSubscribers);
             System.out.println("   - Total Revenue: $" + totalRevenue);
 
+            // Add contact messages attributes
+            model.addAttribute("contactMessages", allMessages);
+            model.addAttribute("unreadMessages", unreadMessages);
+            model.addAttribute("totalMessages", totalMessages);
+            model.addAttribute("unreadCount", unreadCount);
+
         } catch (Exception e) {
             System.out.println("❌ Error loading admin dashboard: " + e.getMessage());
             e.printStackTrace();
 
             // Add session attributes even on error
+
+            // Add session attributes and empty data on error
             model.addAttribute("activeUser", session.getAttribute("activeUser"));
             model.addAttribute("email", session.getAttribute("email"));
             model.addAttribute("userRole", session.getAttribute("userRole"));
-
-            // Add empty data
             model.addAttribute("totalUsers", 0L);
             model.addAttribute("activeCampaigns", 0L);
             model.addAttribute("totalRevenue", BigDecimal.ZERO);
@@ -168,6 +195,15 @@ public class DashboardController {
             model.addAttribute("subscribers", new ArrayList<>());
             model.addAttribute("packageDistribution", getEmptyPackageDistribution());
             model.addAttribute("monthlyRevenue", BigDecimal.ZERO);
+
+
+
+            // Empty contact data on error
+            model.addAttribute("contactMessages", new ArrayList<>());
+            model.addAttribute("unreadMessages", new ArrayList<>());
+            model.addAttribute("totalMessages", 0L);
+            model.addAttribute("unreadCount", 0L);
+
             model.addAttribute("error", "Error loading dashboard: " + e.getMessage());
         }
 

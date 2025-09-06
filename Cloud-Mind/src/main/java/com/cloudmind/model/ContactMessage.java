@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "contact_messages")
 public class ContactMessage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,21 +22,37 @@ public class ContactMessage {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "is_read")
-    private Boolean isRead = false;
-
-    @Column(name = "priority")
+    @Column(nullable = false)
     private String priority = "medium";
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    @Column(name = "is_read", nullable = false)
+    private Boolean isRead = false;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    // Default constructor
+    public ContactMessage() {
+        this.createdAt = LocalDateTime.now();
+        this.isRead = false;
+        this.priority = "medium";
     }
 
-    // Getters and setters
+    // JPA PrePersist to ensure values are set
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.isRead == null) {
+            this.isRead = false;
+        }
+        if (this.priority == null || this.priority.isEmpty()) {
+            this.priority = "medium";
+        }
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -53,12 +68,25 @@ public class ContactMessage {
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getPriority() { return priority; }
+    public void setPriority(String priority) { this.priority = priority; }
 
     public Boolean getIsRead() { return isRead; }
     public void setIsRead(Boolean isRead) { this.isRead = isRead; }
 
-    public String getPriority() { return priority; }
-    public void setPriority(String priority) { this.priority = priority; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    @Override
+    public String toString() {
+        return "ContactMessage{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", subject='" + subject + '\'' +
+                ", priority='" + priority + '\'' +
+                ", isRead=" + isRead +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
