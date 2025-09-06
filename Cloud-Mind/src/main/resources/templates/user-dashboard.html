@@ -14,6 +14,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/styles.css">
+
+
+    <style>
+        .dropdown-menu {
+            z-index: 1050 !important;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+
+    <style>
+        #userProfileImage {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+        }
+
+        #userProfileImage[src=""], #userProfileImage[src="/images/default-avatar.png"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+        }
+    </style>
+
 </head>
 <body>
 <!-- Navbar -->
@@ -21,229 +42,182 @@
 
 <!-- Dashboard Content -->
 <main style="padding-top: 140px; min-height: 100vh; background: var(--bg-secondary);">
-    <div class="container py-4">
+    <div class="container">
         <!-- Dashboard Header -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="glass-card p-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <!-- Profile Image Section -->
+                                <div class="position-relative me-4 mb-3 mb-lg-0">
+                                    <img th:src="@{'/image/user/' + ${session.email}}"
+                                         src="/images/default-avatar.png"
+                                         alt="Profile Picture"
+                                         class="rounded-circle mb-3"
+                                         style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                                         id="userProfileImage">
 
-                            <!-- Profile Image Section - Replace the existing one -->
+                                    <!-- Camera button -->
+                                    <button class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle"
+                                            onclick="openImageUpload()"
+                                            style="width: 28px; height: 28px; padding: 0;"
+                                            title="Change Profile Picture">
+                                        <i class="bi bi-camera"></i>
+                                    </button>
 
-                            <div class="position-relative me-4">
-                                <img id="userProfileImage"
-                                     th:src="@{/image/user/{email}(email=${session.email})}"
-                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100/6366f1/ffffff?text=' + encodeURIComponent('[[${session.activeUser}]]'.charAt(0).toUpperCase());"
-                                     alt="Profile"
-                                     class="rounded-circle border border-3 border-primary profile-image"
-                                     width="100" height="100"
-                                     style="cursor: pointer; object-fit: cover;"
-                                     onclick="openImageUpload()">
+                                    <!-- Hidden Upload Form -->
+                                    <form id="profileImageForm"
+                                          th:action="@{/uploadImage}"
+                                          method="post"
+                                          enctype="multipart/form-data"
+                                          style="display: none;">
+                                        <input type="file"
+                                               id="profileImageInput"
+                                               name="image"
+                                               accept="image/*"
+                                               onchange="previewImage(this)">
+                                    </form>
+                                </div>
 
-                                <!-- Camera button -->
-                                <button class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle"
-                                        onclick="openImageUpload()"
-                                        style="width: 28px; height: 28px; padding: 0;"
-                                        title="Change Profile Picture">
-                                    <i class="bi bi-camera"></i>
-                                </button>
-
-                                <!-- Hidden Upload Form -->
-                                <form th:action="@{/uploadImage}" method="post" enctype="multipart/form-data"
-                                      id="profileImageForm" style="display:none;">
-                                    <input type="file" id="profileImageInput" name="image" accept="image/*"
-                                           onchange="submitImageForm()">
-                                </form>
-                            </div>
-
-                            <!-- User Info -->
-                            <div>
-                                <h1 class="h3 mb-1 fw-bold">Welcome back, <span th:text="${session.activeUser}">User</span>!</h1>
-                                <p class="text-muted mb-0">Here's an overview of your marketing campaigns and performance.</p>
-                                <div class="mt-2">
-                                    <span class="badge bg-success me-2" th:text="${session.userRole}">Member</span>
-                                    <span class="small text-muted">Member since Jan 2025</span>
+                                <!-- User Info -->
+                                <div class="flex-grow-1">
+                                    <h1 class="h3 mb-1 fw-bold">Welcome back, <span th:text="${session.activeUser}">User</span>!</h1>
+                                    <p class="text-muted mb-2">Here's an overview of your marketing campaigns and performance.</p>
+                                    <div>
+                                        <span class="badge bg-success me-2" th:text="${session.userRole}">Member</span>
+                                        <span class="small text-muted">Member since Jan 2025</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-primary">
-                                <i class="bi bi-download me-2"></i>Download Report
-                            </button>
-                            <button class="btn btn-gradient">
-                                <i class="bi bi-plus-circle me-2"></i>Create Campaign
-                            </button>
+                        <div class="col-lg-4">
+                            <div class="d-flex gap-2 justify-content-lg-end justify-content-start mt-3 mt-lg-0">
+                                <button class="btn btn-outline-primary">
+                                    <i class="bi bi-download me-2"></i>Download Report
+                                </button>
+
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-person-gear me-1"></i>Settings
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#" onclick="openImageUpload()"><i class="bi bi-camera me-2"></i>Change Profile Picture</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal"><i class="bi bi-person me-2"></i>Edit Profile</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i>Notifications</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-shield-check me-2"></i>Privacy</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
                 </div>
-            </div>
-        </div>
-
-
-
-
-
-
         <!-- Success/Error Messages -->
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
             <span th:text="${success}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
             <span th:text="${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
-
-
-
-
-
-        <!-- Quick Stats -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="glass-card p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <div class="text-muted small mb-1">Active Campaigns</div>
-                            <div class="h4 fw-bold mb-0">8</div>
-                            <div class="text-success small">
-                                <i class="bi bi-arrow-up"></i> +2 this month
-                            </div>
-                        </div>
-                        <div class="text-primary fs-1">
-                            <i class="bi bi-rocket"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="glass-card p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <div class="text-muted small mb-1">Total Reach</div>
-                            <div class="h4 fw-bold mb-0">24.5K</div>
-                            <div class="text-success small">
-                                <i class="bi bi-arrow-up"></i> +18.2%
-                            </div>
-                        </div>
-                        <div class="text-success fs-1">
-                            <i class="bi bi-eye"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="glass-card p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <div class="text-muted small mb-1">Conversions</div>
-                            <div class="h4 fw-bold mb-0">847</div>
-                            <div class="text-success small">
-                                <i class="bi bi-arrow-up"></i> +12.5%
-                            </div>
-                        </div>
-                        <div class="text-warning fs-1">
-                            <i class="bi bi-graph-up-arrow"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="glass-card p-4 h-100">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <div class="text-muted small mb-1">ROI</div>
-                            <div class="h4 fw-bold mb-0">285%</div>
-                            <div class="text-success small">
-                                <i class="bi bi-arrow-up"></i> +24.1%
-                            </div>
-                        </div>
-                        <div class="text-info fs-1">
-                            <i class="bi bi-currency-dollar"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <!-- My Subscription (Prominent Section) -->
-        <div class="row g-4 mb-4">
+        <!-- My Subscription -->
+        <div class="row mb-4">
             <div class="col-12">
-                <div class="glass-card p-5 border-3 border-primary" style="background: linear-gradient(135deg, var(--glass-bg), rgba(99, 102, 241, 0.05)); box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="fw-bold mb-0 text-primary"><i class="bi bi-star-fill me-3"></i>Current Subscription</h3>
-                        <button class="btn btn-outline-primary" onclick="refreshSubscriptionData()">
-                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
-                        </button>
+                <div class="glass-card p-0 overflow-hidden">
+                    <!-- Enhanced Header -->
+                    <div class="px-4 py-3" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white;">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                            <div class="d-flex align-items-center mb-2 mb-md-0">
+                                <i class="bi bi-star-fill me-3 fs-4"></i>
+                                <div>
+                                    <h4 class="mb-0 fw-bold">My Subscription</h4>
+                                    <small class="opacity-75">Manage your plan and billing</small>
+                                </div>
+                            </div>
+                            <button class="btn btn-light btn-sm">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Replace your current subscription section in user-dashboard.html with this -->
-                    <div class="subscription-section mb-5">
-                        <div class="section-header mb-4">
-                            <h4 class="fw-bold mb-0 text-primary">
-                                <i class="bi bi-credit-card me-2"></i>
-                            </h4>
-                            <p class="text-muted mb-0">Manage your subscription and billing information</p>
-                        </div>
-
-
-
-
-                        <!-- Current Subscription Display -->
+                    <div class="p-4">
+                        <!-- Active Subscription Display -->
                         <div th:if="${hasActiveSubscription and activeSubscription != null}">
-                            <div class="subscription-card">
-                                <!-- Current Plan Display -->
-                                <div class="subscription-header">
-                                    <div class="plan-badge">
-                                        <span th:text="${#strings.toUpperCase(activeSubscription.plan)}" class="plan-name">STARTER</span>
-                                        <span class="badge bg-success">ACTIVE</span>
+                            <div class="row g-4 mb-4">
+                                <!-- Plan Details Card -->
+                                <div class="col-lg-8">
+                                    <div class="p-4 rounded-3 h-100" style="background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.1);">
+                                        <div class="d-flex align-items-center mb-3 flex-wrap">
+                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 mb-2 mb-md-0" style="width: 50px; height: 50px;">
+                                                <i class="bi bi-gem fs-5"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="mb-1 fw-bold text-capitalize" th:text="${activeSubscription.plan ?: 'Professional'}">Professional</h5>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                        <span th:class="${activeSubscription.status == 'ACTIVE' ? 'badge bg-success' : 'badge bg-danger'}"
+                                                              th:text="${activeSubscription.status ?: 'ACTIVE'}">ACTIVE</span>
+                                                    <span class="badge bg-light text-dark" th:text="${activeSubscription.billing ?: 'Monthly'}">Monthly</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Features -->
+                                        <div class="mb-3">
+                                            <div th:switch="${activeSubscription.plan ?: 'professional'}">
+                                                <div th:case="'starter'" class="small text-muted">
+                                                    ✓ 5 Campaigns • ✓ Basic Analytics • ✓ Email Support
+                                                </div>
+                                                <div th:case="'professional'" class="small text-muted">
+                                                    ✓ 25 Campaigns • ✓ Advanced Analytics • ✓ Priority Support
+                                                </div>
+                                                <div th:case="'enterprise'" class="small text-muted">
+                                                    ✓ Unlimited • ✓ Custom Analytics • ✓ 24/7 Support
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Price -->
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                            <div class="mb-2 mb-md-0">
+                                                    <span class="h4 mb-0 fw-bold text-primary">
+                                                        <span th:switch="${activeSubscription.plan ?: 'professional'}">
+                                                            <span th:case="'starter'">$999</span>
+                                                            <span th:case="'professional'">$2499</span>
+                                                            <span th:case="'enterprise'">$4999</span>
+                                                        </span>
+                                                    </span>
+                                                <span class="text-muted ms-1">/ month</span>
+                                            </div>
+                                            <div class="d-flex gap-2 flex-wrap">
+                                                <button class="btn btn-outline-primary btn-sm">
+                                                    <i class="bi bi-arrow-up-circle me-1"></i>Upgrade
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#managePlanModal">
+                                                    <i class="bi bi-gear me-1"></i>Manage
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Plan Details -->
-                                <div class="subscription-body">
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <div class="info-item">
-                                                <small class="text-muted">Plan Type</small>
-                                                <div class="fw-bold text-capitalize" th:text="${activeSubscription.plan}">Starter</div>
+                                <!-- Billing Timeline -->
+                                <div class="col-lg-4">
+                                    <div class="p-4 rounded-3 h-100 text-center" style="background: linear-gradient(135deg, #fef3c7, #fbbf24); color: #92400e;">
+                                        <i class="bi bi-calendar-event fs-3 mb-3"></i>
+                                        <h6 class="fw-bold mb-3">Next Billing</h6>
+                                        <div class="fw-bold fs-4 mb-1">15</div>
+                                        <small class="opacity-75">Feb 2025</small>
+                                        <div class="mt-3">
+                                            <div class="progress" style="height: 4px;">
+                                                <div class="progress-bar" style="width: 75%; background: #92400e;"></div>
                                             </div>
-                                            <div class="info-item">
-                                                <small class="text-muted">Billing</small>
-                                                <div class="fw-bold text-capitalize" th:text="${activeSubscription.billing}">Monthly</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="info-item">
-                                                <small class="text-muted">Payment Method</small>
-                                                <div class="fw-bold text-capitalize" th:text="${activeSubscription.paymentMethod}">Stripe</div>
-                                            </div>
-                                            <div class="info-item">
-                                                <small class="text-muted">Start Date</small>
-                                                <div class="fw-bold" th:text="${subscriptionDate ?: 'Recently purchased'}">Jan 15, 2025</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="subscription-actions mt-4">
-                                    <div class="row g-2">
-                                        <div class="col-md-6">
-                                            <a th:href="@{/subscription}" class="btn btn-outline-primary w-100">
-                                                <i class="bi bi-arrow-up-circle me-1"></i>Upgrade Plan
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button class="btn btn-outline-danger w-100">
-                                                <i class="bi bi-x-circle me-1"></i>Cancel
-                                            </button>
+                                            <small class="mt-1 d-block">75% of cycle</small>
                                         </div>
                                     </div>
                                 </div>
@@ -251,273 +225,39 @@
                         </div>
 
                         <!-- No Subscription State -->
-                        <div th:if="${!hasActiveSubscription or activeSubscription == null}" class="no-subscription-card">
-                            <div class="text-center py-5">
-                                <div class="no-subscription-icon mb-3">
-                                    <i class="bi bi-credit-card-2-front" style="font-size: 3rem; color: #6c757d;"></i>
+                        <div th:if="${!hasActiveSubscription or activeSubscription == null}">
+                            <div class="text-center py-4">
+                                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="bi bi-credit-card-2-front fs-3 text-muted"></i>
                                 </div>
                                 <h5 class="fw-bold mb-2">No Active Subscription</h5>
-                                <p class="text-muted mb-4">You don't have an active subscription yet. Choose a plan to get started with our services.</p>
-                                <a th:href="@{/subscription}" class="btn btn-primary">
-                                    <i class="bi bi-plus-circle me-2"></i>Choose a Plan
-                                </a>
-                            </div>
-                        </div>
+                                <p class="text-muted mb-4">Choose a plan to unlock premium features.</p>
 
-
-<!--                        <div th:if="${hasActiveSubscription and activeSubscription != null}">-->
-
-<!--                            <div class="subscription-card">-->
-<!--                                &lt;!&ndash; Current Plan Display &ndash;&gt;-->
-<!--                                <div class="subscription-header">-->
-<!--                                    <div class="plan-badge">-->
-<!--                                        <span th:text="${#strings.toUpperCase(activeSubscription.plan)}" class="plan-name">STARTER</span>-->
-<!--                                        <span th:class="${activeSubscription.status == 'ACTIVE' ? 'badge bg-success' : 'badge bg-danger'}"-->
-<!--                                              th:text="${activeSubscription.status}">ACTIVE</span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-<!--                                &lt;!&ndash; Plan Details &ndash;&gt;-->
-<!--                                <div class="subscription-body">-->
-<!--                                    <div class="row g-3">-->
-<!--                                        <div class="col-md-6">-->
-<!--                                            <div class="info-item">-->
-<!--                                                <strong>Plan Type:</strong>-->
-<!--                                                <span th:text="${#strings.capitalizeWords(activeSubscription.plan)}">Starter</span>-->
-<!--                                            </div>-->
-<!--                                            <div class="info-item">-->
-<!--                                                <strong>Billing:</strong>-->
-<!--                                                <span th:text="${#strings.capitalizeWords(activeSubscription.billing)}">Monthly</span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-md-6">-->
-<!--                                            <div class="info-item">-->
-<!--                                                <strong>Started:</strong>-->
-<!--                                                <span th:text="${#temporals.format(activeSubscription.subscriptionDate, 'MMM dd, yyyy')}">Jan 15, 2024</span>-->
-<!--                                            </div>-->
-<!--                                            <div class="info-item">-->
-<!--                                                <strong>Status:</strong>-->
-<!--                                                <span th:text="${activeSubscription.status}">Active</span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-<!--                                &lt;!&ndash; Upgrade/Downgrade Buttons &ndash;&gt;-->
-<!--                                <div class="subscription-actions mt-4">-->
-<!--                                    <div class="row g-2">-->
-<!--                                        &lt;!&ndash; Show upgrade options based on current plan &ndash;&gt;-->
-<!--                                        &lt;!&ndash; Starter Plan Options &ndash;&gt;-->
-<!--                                        <div th:if="${activeSubscription.plan == 'starter'}" class="col-12">-->
-<!--                                            <div class="row g-2">-->
-<!--                                                <div class="col-6">-->
-<!--                                                    <form th:action="@{/change-plan}" method="post">-->
-<!--                                                        <input type="hidden" name="newPlan" value="professional">-->
-<!--                                                        <button type="submit" class="btn btn-success w-100">-->
-<!--                                                            Upgrade to Professional-->
-<!--                                                        </button>-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                                <div class="col-6">-->
-<!--                                                    <form th:action="@{/change-plan}" method="post">-->
-<!--                                                        <input type="hidden" name="newPlan" value="enterprise">-->
-<!--                                                        <button type="submit" class="btn btn-success w-100">-->
-<!--                                                            Upgrade to Enterprise-->
-<!--                                                        </button>-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-
-<!--                                        &lt;!&ndash; Professional Plan Options &ndash;&gt;-->
-<!--                                        <div th:if="${activeSubscription.plan == 'professional'}" class="col-12">-->
-<!--                                            <div class="row g-2">-->
-<!--                                                <div class="col-6">-->
-<!--                                                    <form th:action="@{/change-plan}" method="post">-->
-<!--                                                        <input type="hidden" name="newPlan" value="enterprise">-->
-<!--                                                        <button type="submit" class="btn btn-success w-100">-->
-<!--                                                            Upgrade to Enterprise-->
-<!--                                                        </button>-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                                <div class="col-6">-->
-<!--                                                    <form th:action="@{/change-plan}" method="post">-->
-<!--                                                        <input type="hidden" name="newPlan" value="starter">-->
-<!--                                                        <button type="submit" class="btn btn-outline-danger w-100">-->
-<!--                                                            Downgrade to Starter-->
-<!--                                                        </button>-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-
-<!--                                        &lt;!&ndash; Enterprise Plan Options &ndash;&gt;-->
-<!--                                        <div th:if="${activeSubscription.plan == 'enterprise'}" class="col-12">-->
-<!--                                            <div class="row g-2">-->
-<!--                                                <div class="col-6">-->
-<!--                                                    <form th:action="@{/change-plan}" method="post">-->
-<!--                                                        <input type="hidden" name="newPlan" value="professional">-->
-<!--                                                        <button type="submit" class="btn btn-outline-danger w-100">-->
-<!--                                                            Downgrade to Professional-->
-<!--                                                        </button>-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                                <div class="col-6">-->
-<!--                                                    <form th:action="@{/change-plan}" method="post">-->
-<!--                                                        <input type="hidden" name="newPlan" value="starter">-->
-<!--                                                        <button type="submit" class="btn btn-outline-danger w-100">-->
-<!--                                                            Downgrade to Starter-->
-<!--                                                        </button>-->
-<!--                                                    </form>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-                        <!-- Success/Error Messages -->
-<!--                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mt-3">-->
-<!--                            <span th:text="${success}"></span>-->
-<!--                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>-->
-<!--                        </div>-->
-
-<!--                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3">-->
-<!--                            <span th:text="${error}"></span>-->
-<!--                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>-->
-<!--                        </div>-->
-
-
-
-                        <!-- No Subscription State
-                        <div th:if="${subscriptions == null or subscriptions.empty}" class="no-subscription-card">
-                            <div class="text-center py-5">
-                                <div class="no-subscription-icon mb-3">
-                                    <i class="bi bi-credit-card-2-front"></i>
-                                </div>
-                                <h5 class="fw-bold mb-2">No Active Subscription</h5>
-                                <p class="text-muted mb-4">You don't have an active subscription yet. Choose a plan to get started with our services.</p>
-                                <a th:href="@{/subscription}" class="btn btn-primary">
-                                    <i class="bi bi-plus-circle me-2"></i>Choose a Plan
-                                </a>
-                            </div>
-                        </div>
-                    </div>  -->
-
-                    <!-- Active Subscription State (Hidden by default) -->
-                    <div id="activeSubscriptionState" class="d-none">
-                        <div class="text-center mb-4">
-                            <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                                <i class="bi bi-star-fill fs-4"></i>
-                            </div>
-                            <h6 class="fw-bold" id="planName">Pro Plan</h6>
-                            <p class="text-muted small mb-0" id="planDescription">Perfect for growing businesses</p>
-                            <div class="badge bg-success mt-2" id="planStatus">Active</div>
-                        </div>
-
-                        <!-- Subscription Details -->
-                        <div class="subscription-details mb-4">
-                            <div class="row g-2 text-center">
-                                <div class="col-6">
-                                    <div class="bg-light rounded p-2">
-                                        <div class="fw-bold text-primary" id="daysLeft">0</div>
-                                        <div class="small text-muted">Days Left</div>
+                                <div class="row g-2 mb-4 justify-content-center">
+                                    <div class="col-4 col-md-3 col-lg-2">
+                                        <div class="p-3 rounded-3 border text-center">
+                                            <div class="fw-bold text-primary">$29</div>
+                                            <small class="text-muted">Starter</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-3 col-lg-2">
+                                        <div class="p-3 rounded-3 border border-primary text-center" style="background: rgba(99, 102, 241, 0.05);">
+                                            <div class="fw-bold text-primary">$99</div>
+                                            <small class="text-muted">Professional</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-3 col-lg-2">
+                                        <div class="p-3 rounded-3 border text-center">
+                                            <div class="fw-bold text-primary">$299</div>
+                                            <small class="text-muted">Enterprise</small>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="bg-light rounded p-2">
-                                        <div class="fw-bold text-success" id="monthlyPrice">$0</div>
-                                        <div class="small text-muted">Monthly</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Time Progress -->
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="small">Subscription Progress</span>
-                                <span class="small fw-bold" id="timeProgress">0%</span>
+                                <a th:href="@{/subscription}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Choose Plan
+                                </a>
                             </div>
-                            <div class="progress" style="height: 8px;">
-                                <div class="progress-bar bg-success" id="timeProgressBar" style="width: 0%;"></div>
-                            </div>
-                            <div class="d-flex justify-content-between mt-1">
-                                <span class="small text-muted" id="startDate">Start Date</span>
-                                <span class="small text-muted" id="endDate">End Date</span>
-                            </div>
-                        </div>
-
-                        <!-- Usage Stats -->
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="small">Campaigns Used</span>
-                                <span class="small fw-bold" id="campaignsUsed">0/0</span>
-                            </div>
-                            <div class="progress" style="height: 6px;">
-                                <div class="progress-bar" id="campaignsProgressBar" style="width: 0%; background: var(--brand-gradient);"></div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="small">API Calls</span>
-                                <span class="small fw-bold" id="apiCallsUsed">0/0</span>
-                            </div>
-                            <div class="progress" style="height: 6px;">
-                                <div class="progress-bar" id="apiCallsProgressBar" style="width: 0%; background: var(--brand-gradient);"></div>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success" id="renewButton" onclick="renewSubscription()">
-                                <i class="bi bi-arrow-repeat me-2"></i>Renew Subscription
-                            </button>
-                            <button class="btn btn-outline-primary" onclick="upgradeSubscription()">
-                                <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm" onclick="viewSubscriptionDetails()">
-                                <i class="bi bi-eye me-1"></i>View Details
-                            </button>
-                        </div>
-
-                        <!-- Auto-renewal Info -->
-                        <div class="mt-3 p-2 bg-light rounded">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="small">Auto-renewal:</span>
-                                <span class="small fw-bold text-success" id="autoRenewalStatus">OFF</span>
-                            </div>
-                            <button class="btn btn-link btn-sm p-0 text-decoration-none" onclick="toggleAutoRenewal()">
-                                <i class="bi bi-gear me-1"></i>Manage
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Expired Subscription State (Hidden by default) -->
-                    <div id="expiredSubscriptionState" class="d-none">
-                        <div class="text-center mb-4">
-                            <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                                <i class="bi bi-exclamation-triangle fs-4"></i>
-                            </div>
-                            <h6 class="fw-bold text-danger">Subscription Expired</h6>
-                            <p class="text-muted small mb-0">Your subscription has ended. Renew to continue using our services.</p>
-                        </div>
-
-                        <div class="alert alert-warning" role="alert">
-                            <i class="bi bi-clock me-2"></i>
-                            <strong>Expired:</strong> <span id="expiredDate">--</span>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-primary" onclick="renewExpiredSubscription()">
-                                <i class="bi bi-arrow-repeat me-2"></i>Renew Now
-                            </button>
-                            <a href="pricing.html" class="btn btn-outline-primary">
-                                <i class="bi bi-eye me-2"></i>View Plans
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -526,10 +266,10 @@
 
         <!-- Performance Chart & Recent Campaigns -->
         <div class="row g-4 mb-4">
-            <div class="col-lg-6">
-                <div class="glass-card p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="fw-bold mb-0">Campaign Performance</h5>
+            <div class="col-xl-6 mb-4 mb-xl-0">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                        <h5 class="fw-bold mb-2 mb-md-0">Campaign Performance</h5>
                         <div class="btn-group" role="group">
                             <input type="radio" class="btn-check" name="userTimeRange" id="userWeek" checked>
                             <label class="btn btn-outline-primary btn-sm" for="userWeek">7D</label>
@@ -550,10 +290,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="glass-card p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="fw-bold mb-0">Recent Campaigns</h5>
+            <div class="col-xl-6">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                        <h5 class="fw-bold mb-2 mb-md-0">Recent Campaigns</h5>
                         <a href="#" class="btn btn-outline-primary btn-sm">View All</a>
                     </div>
                     <div class="table-responsive">
@@ -561,9 +301,9 @@
                             <thead>
                             <tr>
                                 <th class="border-0 small text-muted">Campaign</th>
-                                <th class="border-0 small text-muted">Type</th>
+                                <th class="border-0 small text-muted d-none d-md-table-cell">Type</th>
                                 <th class="border-0 small text-muted">Status</th>
-                                <th class="border-0 small text-muted">Performance</th>
+                                <th class="border-0 small text-muted d-none d-lg-table-cell">Performance</th>
                                 <th class="border-0 small text-muted">Actions</th>
                             </tr>
                             </thead>
@@ -575,13 +315,13 @@
                                         <div class="small text-muted">Created 2 days ago</div>
                                     </div>
                                 </td>
-                                <td class="border-0">
+                                <td class="border-0 d-none d-md-table-cell">
                                     <span class="badge bg-primary">Social Media</span>
                                 </td>
                                 <td class="border-0">
                                     <span class="badge bg-success">Active</span>
                                 </td>
-                                <td class="border-0">
+                                <td class="border-0 d-none d-lg-table-cell">
                                     <div class="small">
                                         <div class="text-success">↗ 24.5% CTR</div>
                                         <div class="text-muted">1.2K clicks</div>
@@ -589,8 +329,8 @@
                                 </td>
                                 <td class="border-0">
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary">Edit</button>
-                                        <button class="btn btn-outline-secondary">View</button>
+                                        <button class="btn btn-outline-primary btn-sm">Edit</button>
+                                        <button class="btn btn-outline-secondary btn-sm d-none d-md-inline-block">View</button>
                                     </div>
                                 </td>
                             </tr>
@@ -601,13 +341,13 @@
                                         <div class="small text-muted">Created 1 week ago</div>
                                     </div>
                                 </td>
-                                <td class="border-0">
+                                <td class="border-0 d-none d-md-table-cell">
                                     <span class="badge bg-warning">Email</span>
                                 </td>
                                 <td class="border-0">
                                     <span class="badge bg-success">Active</span>
                                 </td>
-                                <td class="border-0">
+                                <td class="border-0 d-none d-lg-table-cell">
                                     <div class="small">
                                         <div class="text-success">↗ 18.2% Open Rate</div>
                                         <div class="text-muted">3.4K opens</div>
@@ -615,8 +355,8 @@
                                 </td>
                                 <td class="border-0">
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary">Edit</button>
-                                        <button class="btn btn-outline-secondary">View</button>
+                                        <button class="btn btn-outline-primary btn-sm">Edit</button>
+                                        <button class="btn btn-outline-secondary btn-sm d-none d-md-inline-block">View</button>
                                     </div>
                                 </td>
                             </tr>
@@ -627,13 +367,13 @@
                                         <div class="small text-muted">Created 2 weeks ago</div>
                                     </div>
                                 </td>
-                                <td class="border-0">
+                                <td class="border-0 d-none d-md-table-cell">
                                     <span class="badge bg-info">Display Ads</span>
                                 </td>
                                 <td class="border-0">
                                     <span class="badge bg-secondary">Paused</span>
                                 </td>
-                                <td class="border-0">
+                                <td class="border-0 d-none d-lg-table-cell">
                                     <div class="small">
                                         <div class="text-warning">↗ 12.1% CTR</div>
                                         <div class="text-muted">856 clicks</div>
@@ -641,8 +381,8 @@
                                 </td>
                                 <td class="border-0">
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary">Resume</button>
-                                        <button class="btn btn-outline-secondary">View</button>
+                                        <button class="btn btn-outline-primary btn-sm">Resume</button>
+                                        <button class="btn btn-outline-secondary btn-sm d-none d-md-inline-block">View</button>
                                     </div>
                                 </td>
                             </tr>
@@ -652,11 +392,94 @@
                 </div>
             </div>
         </div>
-    </div></div>
+    </div>
+        </div>
+    </div>
+    </div>
 </main>
 
+
+<!-- Plan Management Modal -->
+<div class="modal fade" id="managePlanModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-credit-card me-2"></i>Update Payment Method
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-receipt me-2"></i>Download Invoice
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-pause-circle me-2"></i>Pause Subscription
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action text-danger">
+                        <i class="bi bi-x-circle me-2"></i>Cancel Subscription
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</main>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/updateProfile}" method="post" id="editProfileForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="editName" name="fullName"
+                               th:value="${session.activeUser}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editEmail"
+                               th:value="${session.email}" readonly>
+                        <small class="text-muted">Email cannot be changed</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPhone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="editPhone" name="phone"
+                               th:value="${userProfile?.phone}" placeholder="Enter phone number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editBio" class="form-label">Bio</label>
+                        <textarea class="form-control" id="editBio" name="bio" rows="3"
+                                  th:text="${userProfile?.bio}" placeholder="Tell us about yourself"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCompany" class="form-label">Company</label>
+                        <input type="text" class="form-control" id="editCompany" name="company"
+                               th:value="${userProfile?.company}" placeholder="Your company name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLocation" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="editLocation" name="location"
+                               th:value="${userProfile?.location}" placeholder="City, Country">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- Footer -->
 <footer class="footer-modern py-5 mt-5">
@@ -726,7 +549,8 @@
     </div>
 </footer>
 
-<!-- Rest of your footer and scripts remain the same -->
+<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/auth.js}"></script>
 <script th:src="@{/js/script.js}"></script>
@@ -736,40 +560,39 @@
         document.getElementById("profileImageInput").click();
     }
 
-    function submitImageForm() {
-        const form = document.getElementById('profileImageForm');
-        const fileInput = document.getElementById('profileImageInput');
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
 
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-
-            // Check file size on client side
+            // Validate file size before preview
             if (file.size > 2 * 1024 * 1024) {
                 alert('File size should be less than 2MB');
+                input.value = ''; // Clear the input
                 return;
             }
 
-            // Show loading state
-            const img = document.getElementById('userProfileImage');
-            const originalSrc = img.src;
-            img.style.opacity = '0.5';
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file');
+                input.value = ''; // Clear the input
+                return;
+            }
 
-            // Add loading indicator
-            const loadingDiv = document.createElement('div');
-            loadingDiv.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"></div>';
-            loadingDiv.style.position = 'absolute';
-            loadingDiv.style.top = '50%';
-            loadingDiv.style.left = '50%';
-            loadingDiv.style.transform = 'translate(-50%, -50%)';
-            loadingDiv.style.zIndex = '1000';
-            img.parentElement.appendChild(loadingDiv);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update the profile image immediately
+                document.getElementById('userProfileImage').src = e.target.result;
 
-            // Submit form
-            form.submit();
+                // Auto-submit the form after preview
+                setTimeout(() => {
+                    document.getElementById('profileImageForm').submit();
+                }, 500);
+            }
+            reader.readAsDataURL(file);
         }
     }
 
-    // Add this to prevent multiple submissions
+    // Prevent multiple submissions
     let isSubmitting = false;
     document.getElementById('profileImageForm').addEventListener('submit', function(e) {
         if (isSubmitting) {
