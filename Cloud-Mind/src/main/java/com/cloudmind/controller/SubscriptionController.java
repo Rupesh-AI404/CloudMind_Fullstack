@@ -227,10 +227,13 @@ public class SubscriptionController {
 
         try {
             String userEmail = (String) session.getAttribute("email");
+            String userName = (String) session.getAttribute("userName");
+
             if (userEmail == null) {
                 Object activeUser = session.getAttribute("activeUser");
                 if (activeUser instanceof User) {
                     userEmail = ((User) activeUser).getEmail();
+                    userName = ((User) activeUser).getUsername(); // Get username too
                 }
             }
 
@@ -262,6 +265,9 @@ public class SubscriptionController {
                 session.setAttribute("subscriptionCancelled", true);
                 session.setAttribute("hasActiveSubscription", false);
                 session.removeAttribute("activeSubscription");
+
+                // 🔥 SEND CANCELLATION EMAILS - THIS WAS MISSING!
+                sendCancellationEmails(userEmail, userName != null ? userName : "User", cancelledPlan);
 
                 System.out.println("✅ Subscription cancelled successfully for: " + userEmail);
 
@@ -390,19 +396,19 @@ public class SubscriptionController {
             emailService.sendEmail(userEmail, userSubject, userMessage);
             System.out.println("📧 Cancellation email sent to user: " + userEmail);
 
-            // Email to admin
-            String adminEmail = "sabiraventures1@gmail.com"; // Change this to your admin email
+            // Email to admin - FIX THE ADMIN MESSAGE
+            String adminEmail = "sabiraventures1@gmail.com";
             String adminSubject = "🚨 User Subscription Cancelled - " + planName.toUpperCase();
             String adminMessage = String.format(
                     "SUBSCRIPTION CANCELLATION ALERT\n\n" +
                             "A user has cancelled their subscription:\n\n" +
                             "📋 DETAILS:\n" +
+                            "- User Name: %s\n" +
                             "- Email: %s\n" +
                             "- Plan: %s\n" +
-                            "- Cancelled on: %s\n" +
-                            "- User IP: [Track if needed]\n\n" +
+                            "- Cancelled on: %s\n\n" +
                             "💡 ACTION ITEMS:\n" +
-                            "- Review cancellation reason (if survey implemented)\n" +
+                            "- Review cancellation reason\n" +
                             "- Consider follow-up retention email\n" +
                             "- Update billing system\n" +
                             "- Monitor churn metrics\n\n" +
