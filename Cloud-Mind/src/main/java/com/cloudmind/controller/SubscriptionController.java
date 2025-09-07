@@ -227,13 +227,20 @@ public class SubscriptionController {
 
         try {
             String userEmail = (String) session.getAttribute("email");
-            String userName = (String) session.getAttribute("userName");
+            if (userEmail == null) {
+                Object activeUser = session.getAttribute("activeUser");
+                if (activeUser instanceof User) {
+                    userEmail = ((User) activeUser).getEmail();
+                }
+            }
 
             if (userEmail == null) {
                 response.put("success", false);
                 response.put("message", "Session expired");
                 return response;
             }
+
+            System.out.println("🔄 Cancelling subscription for: " + userEmail);
 
             // Find and cancel ALL active subscriptions
             List<Subscriber> allSubscriptions = subscriberRepository.findByEmail(userEmail);
@@ -251,15 +258,12 @@ public class SubscriptionController {
             }
 
             if (subscriptionCancelled) {
-                // FORCE clear all session subscription data
+                // Set cancellation flag and clear session
                 session.setAttribute("subscriptionCancelled", true);
                 session.setAttribute("hasActiveSubscription", false);
                 session.removeAttribute("activeSubscription");
-                session.removeAttribute("subscriptionDetails");
-                session.removeAttribute("upgradeDetails");
 
-                // Send cancellation emails
-                sendCancellationEmails(userEmail, userName != null ? userName : "User", cancelledPlan);
+                System.out.println("✅ Subscription cancelled successfully for: " + userEmail);
 
                 response.put("success", true);
                 response.put("message", "Subscription cancelled successfully");
@@ -270,6 +274,7 @@ public class SubscriptionController {
 
         } catch (Exception e) {
             System.err.println("❌ Error cancelling subscription: " + e.getMessage());
+            e.printStackTrace();
             response.put("success", false);
             response.put("message", "Error: " + e.getMessage());
         }
