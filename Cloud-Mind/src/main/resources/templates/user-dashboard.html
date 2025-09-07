@@ -105,8 +105,6 @@
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="dropdown-item" href="#" onclick="openImageUpload()"><i class="bi bi-camera me-2"></i>Change Profile Picture</a></li>
                                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal"><i class="bi bi-person me-2"></i>Edit Profile</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i>Notifications</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-shield-check me-2"></i>Privacy</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item text-danger" href="/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                                     </ul>
@@ -195,9 +193,9 @@
                                                 <span class="text-muted ms-1">/ month</span>
                                             </div>
                                             <div class="d-flex gap-2 flex-wrap">
-                                                <button class="btn btn-outline-primary btn-sm">
-                                                    <i class="bi bi-arrow-up-circle me-1"></i>Upgrade
-                                                </button>
+<!--                                                <button class="btn btn-outline-primary btn-sm">-->
+<!--                                                    <i class="bi bi-arrow-up-circle me-1" th:href="${subscription}"></i>Upgrade-->
+<!--                                                </button>-->
                                                 <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#managePlanModal">
                                                     <i class="bi bi-gear me-1"></i>Manage
                                                 </button>
@@ -212,7 +210,7 @@
                                         <i class="bi bi-calendar-event fs-3 mb-3"></i>
                                         <h6 class="fw-bold mb-3">Next Billing</h6>
                                         <div class="fw-bold fs-4 mb-1">15</div>
-                                        <small class="opacity-75">Feb 2025</small>
+                                        <small class="opacity-75">Oct 2025</small>
                                         <div class="mt-3">
                                             <div class="progress" style="height: 4px;">
                                                 <div class="progress-bar" style="width: 75%; background: #92400e;"></div>
@@ -236,19 +234,19 @@
                                 <div class="row g-2 mb-4 justify-content-center">
                                     <div class="col-4 col-md-3 col-lg-2">
                                         <div class="p-3 rounded-3 border text-center">
-                                            <div class="fw-bold text-primary">$29</div>
+                                            <div class="fw-bold text-primary">$999</div>
                                             <small class="text-muted">Starter</small>
                                         </div>
                                     </div>
                                     <div class="col-4 col-md-3 col-lg-2">
                                         <div class="p-3 rounded-3 border border-primary text-center" style="background: rgba(99, 102, 241, 0.05);">
-                                            <div class="fw-bold text-primary">$99</div>
+                                            <div class="fw-bold text-primary">$2499</div>
                                             <small class="text-muted">Professional</small>
                                         </div>
                                     </div>
                                     <div class="col-4 col-md-3 col-lg-2">
                                         <div class="p-3 rounded-3 border text-center">
-                                            <div class="fw-bold text-primary">$299</div>
+                                            <div class="fw-bold text-primary">$4999</div>
                                             <small class="text-muted">Enterprise</small>
                                         </div>
                                     </div>
@@ -409,16 +407,13 @@
             </div>
             <div class="modal-body">
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a th:href="@{/subscription}" class="list-group-item list-group-item-action">
                         <i class="bi bi-credit-card me-2"></i>Update Payment Method
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <i class="bi bi-receipt me-2"></i>Download Invoice
+                    <a href="#" onclick="downloadReport()" class="list-group-item list-group-item-action">
+                        <i class="bi bi-receipt me-2"></i>Download Report
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <i class="bi bi-pause-circle me-2"></i>Pause Subscription
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action text-danger">
+                    <a href="#" onclick="confirmCancelSubscription()" class="list-group-item list-group-item-action text-danger">
                         <i class="bi bi-x-circle me-2"></i>Cancel Subscription
                     </a>
                 </div>
@@ -426,6 +421,40 @@
         </div>
     </div>
 </div>
+
+<!-- Cancel Subscription Confirmation Modal -->
+<div class="modal fade" id="cancelSubscriptionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Cancel Subscription
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="mb-4">
+                    <i class="bi bi-exclamation-circle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h6 class="fw-bold mb-3">Are you sure you want to cancel your subscription?</h6>
+                <p class="text-muted mb-4">
+                    This action will immediately cancel your subscription and you'll lose access to premium features.
+                    You can resubscribe at any time.
+                </p>
+                <div class="alert alert-warning" role="alert">
+                    <strong>Note:</strong> This action cannot be undone. All premium features will be disabled immediately.
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-arrow-left me-1"></i>Keep Subscription
+                </button>
+                <button type="button" class="btn btn-danger" onclick="cancelSubscription()">
+                    <i class="bi bi-trash me-1"></i>Yes, Cancel Subscription
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Edit Profile Modal -->
@@ -601,6 +630,123 @@
         }
         isSubmitting = true;
     });
+
+    // Download user report
+    function downloadReport() {
+        // Show loading state
+        const originalText = event.target.innerHTML;
+        event.target.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Generating...';
+        event.target.style.pointerEvents = 'none';
+
+        // Call the download endpoint
+        fetch('/downloadReport', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Failed to generate report');
+            })
+            .then(blob => {
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'subscription-report.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Show success message
+                alert('Report downloaded successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to download report. Please try again.');
+            })
+            .finally(() => {
+                // Restore button state
+                event.target.innerHTML = originalText;
+                event.target.style.pointerEvents = 'auto';
+            });
+    }
+
+    // Show cancel confirmation modal
+    function confirmCancelSubscription() {
+        // Close manage plan modal first
+        const managePlanModal = bootstrap.Modal.getInstance(document.getElementById('managePlanModal'));
+        managePlanModal.hide();
+
+        // Show cancel confirmation modal
+        setTimeout(() => {
+            const cancelModal = new bootstrap.Modal(document.getElementById('cancelSubscriptionModal'));
+            cancelModal.show();
+        }, 300);
+    }
+
+    // Cancel subscription
+    function cancelSubscription() {
+        const cancelBtn = document.querySelector('#cancelSubscriptionModal .btn-danger');
+        const originalText = cancelBtn.innerHTML;
+
+        cancelBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Cancelling...';
+        cancelBtn.disabled = true;
+
+        fetch('/cancelSubscription', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Close modal
+                    const cancelModal = bootstrap.Modal.getInstance(document.getElementById('cancelSubscriptionModal'));
+                    if (cancelModal) {
+                        cancelModal.hide();
+                    }
+
+                    alert('✅ Subscription cancelled successfully!\n\n📧 Confirmation emails have been sent to you and admin.');
+
+                    // Force complete page reload with cache busting
+                    window.location.href = '/user-dashboard?cancelled=true&t=' + Date.now();
+
+                } else {
+                    alert('❌ Failed to cancel subscription: ' + (data.message || 'Unknown error'));
+                    cancelBtn.innerHTML = originalText;
+                    cancelBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                alert('❌ Failed to cancel subscription: ' + error.message);
+                cancelBtn.innerHTML = originalText;
+                cancelBtn.disabled = false;
+            });
+    }
+
+
+
+
+
+        // Add this to your dashboard page for debugging
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug what's in the database
+            fetch('/debugSubscription')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Database subscriptions:', data.subscriptions);
+                });
+        });
+
+
 </script>
+
 </body>
 </html>

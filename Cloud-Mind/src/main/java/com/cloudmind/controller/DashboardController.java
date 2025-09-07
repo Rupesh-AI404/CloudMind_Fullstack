@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.cloudmind.repository.ContactMessageRepository;
 
@@ -32,7 +33,31 @@ public class DashboardController {
     private ContactMessageRepository contactRepo;
 
     @GetMapping("/user-dashboard")
-    public String userDashboard(HttpSession session, Model model) {
+    public String userDashboard(HttpSession session, Model model, @RequestParam(required = false) String cancelled) {
+
+        // FIRST - Check for cancellation
+        Boolean subscriptionCancelled = (Boolean) session.getAttribute("subscriptionCancelled");
+        boolean wasCancelled = (cancelled != null && "true".equals(cancelled)) ||
+                (subscriptionCancelled != null && subscriptionCancelled);
+
+        if (wasCancelled) {
+            System.out.println("🔄 Dashboard: Subscription was cancelled - forcing no subscription state");
+
+            // Clear all subscription-related session data
+            session.removeAttribute("subscriptionCancelled");
+            session.setAttribute("hasActiveSubscription", false);
+            session.removeAttribute("activeSubscription");
+
+            // Force no subscription state
+            model.addAttribute("hasActiveSubscription", false);
+            model.addAttribute("activeSubscription", null);
+            model.addAttribute("activeUser", session.getAttribute("activeUser"));
+            model.addAttribute("userRole", session.getAttribute("userRole"));
+            model.addAttribute("userEmail", session.getAttribute("email"));
+
+            return "user-dashboard";
+        }
+
         System.out.println("=== User Dashboard Access ===");
 
         // Check authentication
@@ -45,7 +70,6 @@ public class DashboardController {
         String userEmail = null;
         Object activeUser = session.getAttribute("activeUser");
 
-        // Try different ways to get email
         if (activeUser instanceof User) {
             userEmail = ((User) activeUser).getEmail();
         } else if (session.getAttribute("email") != null) {
@@ -61,29 +85,30 @@ public class DashboardController {
             return "redirect:/login";
         }
 
-        // Fetch subscription from database
-        // Fetch subscription from database
+        // Check for NON-CANCELLED subscriptions only
+        boolean hasActiveSubscription = false;
         Subscriber activeSubscription = null;
-        try {
-            // Use the new method that gets the latest subscription
-            activeSubscription = repo.findFirstByEmailOrderByIdDesc(userEmail);
 
-            if (activeSubscription != null) {
-                System.out.println("✅ Found subscription (latest):");
-                System.out.println("   ID: " + activeSubscription.getId());
-                System.out.println("   Email: " + activeSubscription.getEmail());
-                System.out.println("   Plan: " + activeSubscription.getPlan());
-                System.out.println("   Billing: " + activeSubscription.getBilling());
-                System.out.println("   Payment Method: " + activeSubscription.getPaymentMethod());
-            } else {
-                System.out.println("❌ No subscription found for email: " + userEmail);
+        try {
+            List<Subscriber> allSubscriptions = repo.findByEmail(userEmail);
+            System.out.println("Found " + allSubscriptions.size() + " total subscriptions for email: " + userEmail);
+
+            // Find the latest NON-CANCELLED subscription
+            for (int i = allSubscriptions.size() - 1; i >= 0; i--) {
+                Subscriber sub = allSubscriptions.get(i);
+                String status = sub.getStatus();
+                System.out.println("Checking subscription: Plan=" + sub.getPlan() + ", Status=" + status);
+
+                if (status == null || !status.equalsIgnoreCase("CANCELLED")) {
+                    activeSubscription = sub;
+                    hasActiveSubscription = true;
+                    System.out.println("✅ Found active subscription: " + sub.getPlan());
+                    break;
+                }
             }
 
-            // Debug: Show how many duplicate subscriptions exist
-            List<Subscriber> allForEmail = repo.findByEmail(userEmail);
-            if (allForEmail.size() > 1) {
-                System.out.println("⚠️  Found " + allForEmail.size() + " subscription records for this email!");
-                System.out.println("   Using the latest one (ID: " + (activeSubscription != null ? activeSubscription.getId() : "none") + ")");
+            if (!hasActiveSubscription) {
+                System.out.println("❌ No active subscription found (all are cancelled or none exist)");
             }
 
         } catch (Exception e) {
@@ -91,24 +116,30 @@ public class DashboardController {
             e.printStackTrace();
         }
 
-        // Add data to model
+        // Set session and model attributes
+        session.setAttribute("hasActiveSubscription", hasActiveSubscription);
+        model.addAttribute("hasActiveSubscription", hasActiveSubscription);
         model.addAttribute("activeUser", activeUser);
         model.addAttribute("userRole", session.getAttribute("userRole"));
         model.addAttribute("userEmail", userEmail);
 
-        if (activeSubscription != null) {
-            model.addAttribute("hasActiveSubscription", true);
+        if (hasActiveSubscription && activeSubscription != null) {
+            session.setAttribute("activeSubscription", activeSubscription);
             model.addAttribute("activeSubscription", activeSubscription);
+            model.addAttribute("userSubscription", activeSubscription);
             model.addAttribute("subscriptionDate", "Recently purchased");
-            System.out.println("✅ Added subscription data to model");
+            System.out.println("✅ Added active subscription to model: " + activeSubscription.getPlan());
         } else {
-            model.addAttribute("hasActiveSubscription", false);
+            session.removeAttribute("activeSubscription");
             model.addAttribute("activeSubscription", null);
+            model.addAttribute("userSubscription", null);
             System.out.println("❌ No subscription data added to model");
         }
 
         return "user-dashboard";
     }
+
+
 
     @GetMapping("/admin-dashboard")
     public String adminDashboard(HttpSession session, Model model) {

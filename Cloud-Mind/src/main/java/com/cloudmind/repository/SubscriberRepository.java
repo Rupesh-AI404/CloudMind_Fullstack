@@ -34,6 +34,8 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
 
 
 
+
+
 //    @Query("SELECT s FROM Subscriber s ORDER BY s.createdAt DESC")
 //    List<Subscriber> findAllOrderByCreatedAtDesc();
 //
