@@ -5,13 +5,14 @@ import com.cloudmind.model.Subscriber;
 import com.cloudmind.model.User;
 import com.cloudmind.repository.SubscriberRepository;
 import com.cloudmind.repository.UserRepository;
+import com.cloudmind.service.EmailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.cloudmind.repository.ContactMessageRepository;
 
 import java.math.BigDecimal;
@@ -31,6 +32,9 @@ public class DashboardController {
 
     @Autowired
     private ContactMessageRepository contactRepo;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/user-dashboard")
     public String userDashboard(HttpSession session, Model model, @RequestParam(required = false) String cancelled) {
@@ -344,4 +348,159 @@ public class DashboardController {
         distribution.put("enterprise", 0L);
         return distribution;
     }
+
+
+    @GetMapping("/subscriber/{id}")
+    @ResponseBody
+    public ResponseEntity<Subscriber> getSubscriber(@PathVariable Long id) {
+        try {
+            Optional<Subscriber> subscriber = repo.findById(id);
+            if (subscriber.isPresent()) {
+                System.out.println("✅ Found subscriber: " + subscriber.get().getEmail());
+                return ResponseEntity.ok(subscriber.get());
+            } else {
+                System.out.println("❌ Subscriber not found with ID: " + id);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Error fetching subscriber: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/admin/cancel-subscription/{subscriberId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> adminCancelSubscription(@PathVariable Long subscriberId) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Find the subscriber
+            Optional<Subscriber> subscriberOpt = repo.findById(subscriberId);
+
+            if (!subscriberOpt.isPresent()) {
+                response.put("success", false);
+                response.put("message", "Subscriber not found");
+                return ResponseEntity.notFound().build();
+            }
+
+            Subscriber subscriber = subscriberOpt.get();
+
+            // Delete the subscriber from database
+            repo.delete(subscriber);
+
+            System.out.println("✅ Subscriber deleted successfully: " + subscriber.getEmail());
+
+            response.put("success", true);
+            response.put("message", "Subscriber deleted successfully");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            System.err.println("❌ Error deleting subscriber: " + e.getMessage());
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "Error deleting subscriber: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    private void sendAdminCancellationEmails(String userEmail, String userName, String planName, String cancelledBy) {
+        try {
+            // Email to user
+            String userSubject = "Subscription Cancelled by Admin - Cloud Mind";
+            String userMessage = String.format(
+                    "Dear %s,\n\n" +
+                            "Your %s subscription has been cancelled by our administration team.\n\n" +
+                            "Cancellation Details:\n" +
+                            "- Account: %s\n" +
+                            "- Plan: %s\n" +
+                            "- Cancelled by: %s\n" +
+                            "- Cancelled on: %s\n" +
+                            "- Access expires: Immediately\n\n" +
+                            "If you believe this cancellation was made in error, please contact our support team immediately.\n" +
+                            "You can resubscribe at any time by visiting our subscription page.\n\n" +
+                            "If you have any questions, please contact our support team.\n\n" +
+                            "Best regards,\n" +
+                            "Cloud Mind Team",
+                    userName, planName.toUpperCase(), userEmail, planName.toUpperCase(), cancelledBy, new Date()
+            );
+
+            // Send email to user - CHANGED FROM STATIC TO INSTANCE
+            emailService.sendEmail(userEmail, userSubject, userMessage);
+            System.out.println("📧 Admin cancellation email sent to user: " + userEmail);
+
+            // Email to admin
+            String adminEmail = "sabiraventures1@gmail.com";
+            String adminSubject = "🔴 ADMIN CANCELLATION - " + planName.toUpperCase() + " Subscription";
+            String adminMessage = String.format(
+                    "ADMIN SUBSCRIPTION CANCELLATION COMPLETED\n\n" +
+                            "An admin has cancelled a user subscription:\n\n" +
+                            "📋 CANCELLATION DETAILS:\n" +
+                            "- User Name: %s\n" +
+                            "- Email: %s\n" +
+                            "- Plan: %s\n" +
+                            "- Cancelled by: %s\n" +
+                            "- Cancelled on: %s\n" +
+                            "- Reason: Administrative Action\n\n" +
+                            "💡 FOLLOW-UP ACTIONS:\n" +
+                            "- User has been notified via email\n" +
+                            "- Subscription access terminated immediately\n" +
+                            "- Revenue tracking updated\n" +
+                            "- Consider customer retention follow-up\n\n" +
+                            "📊 IMPACT:\n" +
+                            "- Monthly Revenue Impact: -$%s\n" +
+                            "- Active Subscriber Count: Reduced by 1\n\n" +
+                            "This is an automated notification from Cloud Mind Admin Panel.\n\n" +
+                            "Cloud Mind Administration",
+                    userName, userEmail, planName.toUpperCase(), cancelledBy, new Date(),
+                    planName.equals("enterprise") ? "4,999" : (planName.equals("pro") ? "2,499" : "999")
+            );
+
+            // Send email to admin - CHANGED FROM STATIC TO INSTANCE
+            emailService.sendEmail(adminEmail, adminSubject, adminMessage);
+            System.out.println("📧 Admin cancellation notification sent to admin");
+
+        } catch (Exception e) {
+            System.err.println("❌ Failed to send admin cancellation emails: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    @PostMapping("/admin/send-email")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> sendEmailToUser(@RequestBody Map<String, String> request) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            String to = request.get("to");
+            String subject = request.get("subject");
+            String message = request.get("message");
+
+            if (to == null || subject == null || message == null) {
+                response.put("success", false);
+                response.put("message", "Missing required fields");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            // Send email using your EmailService
+            emailService.sendEmail(to, subject, message);
+
+            System.out.println("✅ Email sent successfully to: " + to);
+
+            response.put("success", true);
+            response.put("message", "Email sent successfully");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending email: " + e.getMessage());
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "Error sending email: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
+
 }
+
