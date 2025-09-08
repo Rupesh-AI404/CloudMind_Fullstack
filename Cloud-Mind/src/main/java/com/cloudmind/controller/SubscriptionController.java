@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
 
 import java.util.*;
 
@@ -290,86 +294,99 @@ public class SubscriptionController {
 
     private byte[] generateUserReport(String email, HttpSession session) throws Exception {
         try {
-            // Get actual user subscription data
-            List<Subscriber> activeSubscriptions = subscriberRepository.findByEmailAndStatus(email, "ACTIVE");
+            // Get ALL subscriptions for this user
+            List<Subscriber> allSubscriptions = subscriberRepository.findByEmail(email);
+
+            // Find active subscription (status not cancelled)
             Subscriber subscription = null;
-
-            if (!activeSubscriptions.isEmpty()) {
-                subscription = activeSubscriptions.get(0);
+            for (Subscriber sub : allSubscriptions) {
+                if (sub.getStatus() != null && !"CANCELLED".equalsIgnoreCase(sub.getStatus())) {
+                    subscription = sub;
+                    break;
+                }
             }
 
-            StringBuilder reportContent = new StringBuilder();
-            reportContent.append("===============================================\n");
-            reportContent.append("           CLOUD MIND SUBSCRIPTION REPORT      \n");
-            reportContent.append("===============================================\n\n");
+            // Create PDF
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            com.itextpdf.text.pdf.PdfWriter.getInstance(document, baos);
 
-            reportContent.append("USER INFORMATION:\n");
-            reportContent.append("-----------------\n");
-            reportContent.append("Name: ").append(session.getAttribute("activeUser")).append("\n");
-            reportContent.append("Email: ").append(email).append("\n");
-            reportContent.append("Report Generated: ").append(new Date()).append("\n\n");
+            document.open();
 
-            reportContent.append("SUBSCRIPTION DETAILS:\n");
-            reportContent.append("---------------------\n");
+            document.add(new com.itextpdf.text.Paragraph("==============================================="));
+            document.add(new com.itextpdf.text.Paragraph("           CLOUD MIND SUBSCRIPTION REPORT      "));
+            document.add(new com.itextpdf.text.Paragraph("===============================================\n\n"));
+
+            document.add(new com.itextpdf.text.Paragraph("USER INFORMATION:"));
+            document.add(new com.itextpdf.text.Paragraph("-----------------"));
+            document.add(new com.itextpdf.text.Paragraph("Name: " + session.getAttribute("activeUser")));
+            document.add(new com.itextpdf.text.Paragraph("Email: " + email));
+            document.add(new com.itextpdf.text.Paragraph("Report Generated: " + new Date() + "\n\n"));
+
+            document.add(new com.itextpdf.text.Paragraph("SUBSCRIPTION DETAILS:"));
+            document.add(new com.itextpdf.text.Paragraph("---------------------"));
             if (subscription != null) {
-                reportContent.append("Plan: ").append(subscription.getPlan().toUpperCase()).append("\n");
-                reportContent.append("Status: ").append(subscription.getStatus()).append("\n");
-                reportContent.append("Billing Cycle: Monthly\n");
-                reportContent.append("Start Date: ").append(subscription.getCreatedAt() != null ? subscription.getCreatedAt() : "N/A").append("\n");
-
+                document.add(new com.itextpdf.text.Paragraph("Plan: " + subscription.getPlan().toUpperCase()));
+                document.add(new com.itextpdf.text.Paragraph("Status: " + subscription.getStatus()));
+                document.add(new com.itextpdf.text.Paragraph("Billing Cycle: " + subscription.getBilling()));
+                document.add(new com.itextpdf.text.Paragraph("Start Date: " +
+                        (subscription.getCreatedAt() != null ? subscription.getCreatedAt() : "N/A")));
                 Integer planPrice = PLAN_PRICES.get(subscription.getPlan().toLowerCase());
-                reportContent.append("Monthly Fee: $").append(planPrice != null ? planPrice : "N/A").append("\n");
+                document.add(new com.itextpdf.text.Paragraph("Monthly Fee: $" +
+                        (planPrice != null ? planPrice : "N/A")));
             } else {
-                reportContent.append("Plan: No Active Subscription\n");
-                reportContent.append("Status: Inactive\n");
+                document.add(new com.itextpdf.text.Paragraph("Plan: No Active Subscription"));
+                document.add(new com.itextpdf.text.Paragraph("Status: Inactive"));
             }
 
-            reportContent.append("\nACCOUNT SUMMARY:\n");
-            reportContent.append("----------------\n");
-            reportContent.append("Member Since: January 2025\n");
-            reportContent.append("Total Campaigns: 8\n");
-            reportContent.append("Active Campaigns: 3\n");
-            reportContent.append("Reports Generated: 1\n\n");
+            document.add(new com.itextpdf.text.Paragraph("\nACCOUNT SUMMARY:"));
+            document.add(new com.itextpdf.text.Paragraph("----------------"));
+            document.add(new com.itextpdf.text.Paragraph("Member Since: January 2025"));
+            document.add(new com.itextpdf.text.Paragraph("Total Campaigns: 8"));
+            document.add(new com.itextpdf.text.Paragraph("Active Campaigns: 3"));
+            document.add(new com.itextpdf.text.Paragraph("Reports Generated: 1\n"));
 
-            reportContent.append("FEATURES INCLUDED:\n");
-            reportContent.append("------------------\n");
+            document.add(new com.itextpdf.text.Paragraph("FEATURES INCLUDED:"));
+            document.add(new com.itextpdf.text.Paragraph("------------------"));
             if (subscription != null) {
                 String plan = subscription.getPlan().toLowerCase();
                 switch (plan) {
                     case "starter":
-                        reportContent.append("✓ Basic Dashboard\n");
-                        reportContent.append("✓ 5 Campaigns\n");
-                        reportContent.append("✓ Email Support\n");
+                        document.add(new com.itextpdf.text.Paragraph("✓ Basic Dashboard"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ 5 Campaigns"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Email Support"));
                         break;
                     case "professional":
-                        reportContent.append("✓ Advanced Dashboard\n");
-                        reportContent.append("✓ Unlimited Campaigns\n");
-                        reportContent.append("✓ Priority Support\n");
-                        reportContent.append("✓ Analytics Reports\n");
+                        document.add(new com.itextpdf.text.Paragraph("✓ Advanced Dashboard"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Unlimited Campaigns"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Priority Support"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Analytics Reports"));
                         break;
                     case "enterprise":
-                        reportContent.append("✓ Enterprise Dashboard\n");
-                        reportContent.append("✓ Unlimited Everything\n");
-                        reportContent.append("✓ 24/7 Support\n");
-                        reportContent.append("✓ Custom Integrations\n");
-                        reportContent.append("✓ Dedicated Account Manager\n");
+                        document.add(new com.itextpdf.text.Paragraph("✓ Enterprise Dashboard"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Unlimited Everything"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ 24/7 Support"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Custom Integrations"));
+                        document.add(new com.itextpdf.text.Paragraph("✓ Dedicated Account Manager"));
                         break;
                 }
             } else {
-                reportContent.append("No active subscription\n");
+                document.add(new com.itextpdf.text.Paragraph("No active subscription"));
             }
 
-            reportContent.append("\n===============================================\n");
-            reportContent.append("         Thank you for using Cloud Mind!       \n");
-            reportContent.append("===============================================\n");
+            document.add(new com.itextpdf.text.Paragraph("\n==============================================="));
+            document.add(new com.itextpdf.text.Paragraph("         Thank you for using Cloud Mind!       "));
+            document.add(new com.itextpdf.text.Paragraph("===============================================\n"));
 
-            return reportContent.toString().getBytes("UTF-8");
+            document.close();
+            return baos.toByteArray();
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Failed to generate report: " + e.getMessage());
         }
     }
+
 
     private void sendCancellationEmails(String userEmail, String userName, String planName) {
         try {
