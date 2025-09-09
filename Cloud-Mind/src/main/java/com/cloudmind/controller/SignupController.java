@@ -75,7 +75,7 @@ public class SignupController {
             if ("ADMIN".equals(savedUser.getRole())) {
                 return "redirect:/admin-dashboard";
             } else {
-                return "redirect:/user-dashboard";
+                return "redirect:/";
             }
 
         } catch (Exception e) {
