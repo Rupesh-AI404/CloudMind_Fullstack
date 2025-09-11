@@ -10,17 +10,17 @@
   --text-tertiary: #64748b;
   --border-primary: #e2e8f0;
   --border-secondary: #cbd5e1;
-  
+
   /* Brand colors */
   --brand-primary: #6366f1;
   --brand-secondary: #a855f7;
   --brand-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-  
+
   /* Shadow colors */
   --shadow-light: rgba(0, 0, 0, 0.05);
   --shadow-medium: rgba(0, 0, 0, 0.1);
   --shadow-heavy: rgba(0, 0, 0, 0.15);
-  
+
   /* Glass effect */
   --glass-bg: rgba(255, 255, 255, 0.9);
   --glass-border: rgba(255, 255, 255, 0.2);
@@ -37,11 +37,11 @@
   --text-tertiary: #94a3b8;
   --border-primary: #334155;
   --border-secondary: #475569;
-  
+
   --shadow-light: rgba(0, 0, 0, 0.3);
   --shadow-medium: rgba(0, 0, 0, 0.4);
   --shadow-heavy: rgba(0, 0, 0, 0.5);
-  
+
   --glass-bg: rgba(15, 23, 42, 0.9);
   --glass-border: rgba(255, 255, 255, 0.1);
 }
@@ -1914,3 +1914,41 @@ html {
 .subscription-section {
   margin-top: 2rem;
 }
+
+
+/* profile work*/
+
+/* Keep navbar dropdown always on top */
+/* Ensure dropdowns always appear above cards */
+/*.dropdown-menu {*/
+/*  position: absolute !important;*/
+/*  z-index: 9999 !important; !* way above glass-card *!*/
+/*}*/
+
+/* Prevent glass-card from creating new stacking context */
+/* Force dropdowns inside glass-card to escape stacking context */
+/*.glass-card {*/
+/*  overflow: visible !important; !* allow child dropdowns to overflow *!*/
+/*}*/
+
+/*.glass-card .dropdown-menu {*/
+/*  position: absolute !important;*/
+/*  z-index: 9999 !important;*/
+/*  top: 100% !important;   !* ensures it renders below the button *!*/
+/*  left: auto !important;*/
+/*  right: 0 !important;*/
+/*}*/
+
+
+/*.dropdown-menu {*/
+/*  z-index: 2000 !important;*/
+/*}*/
+
+/*.navbar .dropdown-menu {*/
+/*  z-index: 9999 !important;*/
+/*  position: absolute !important;*/
+/*}*/
+
+
+
+/* Simple Error Message Styling - No Design Changes */

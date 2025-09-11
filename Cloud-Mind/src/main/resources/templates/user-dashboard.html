@@ -16,22 +16,52 @@
     <link rel="stylesheet" href="/css/styles.css">
 
 
+
     <style>
         .dropdown-menu {
             z-index: 1050 !important;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
         }
-    </style>
 
-    <style>
-        #userProfileImage {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-size: cover;
+        /* Fix for settings dropdown going behind subscription box */
+        .dropdown {
+            position: relative;
+            z-index: 1051;
         }
 
-        #userProfileImage[src=""], #userProfileImage[src="/images/default-avatar.png"] {
+        /* Ensure glass cards don't interfere */
+        .glass-card {
+            position: relative;
+            z-index: auto;
+        }
+
+        /* Specific fix for dashboard header dropdown */
+        .glass-card .dropdown {
+            z-index: 1052 !important;
+        }
+
+        .glass-card .dropdown-menu {
+            z-index: 1053 !important;
+        }
+
+        /* Fixed profile image styling */
+        #userProfileImage {
+            width: 100px !important;
+            height: 100px !important;
+            object-fit: cover !important;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+            border: 3px solid rgba(255,255,255,0.2) !important;
+        }
+
+        /* Default avatar styling when no image */
+        #userProfileImage[src=""],
+        #userProfileImage[src="/images/default-avatar.png"],
+        #userProfileImage[src*="default"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 
@@ -51,12 +81,13 @@
                         <div class="col-lg-8">
                             <div class="d-flex align-items-center flex-wrap">
                                 <!-- Profile Image Section -->
+                                <!-- Profile Image Section -->
                                 <div class="position-relative me-4 mb-3 mb-lg-0">
                                     <img th:src="@{'/image/user/' + ${session.email}}"
                                          src="/images/default-avatar.png"
                                          alt="Profile Picture"
                                          class="rounded-circle"
-                                         style="display: flex; justify-content: center; align-items: center; height: 100px; background-color: #f0f2f5;"
+                                         style="width: 100px; height: 100px; object-fit: cover; border: 3px solid rgba(255,255,255,0.2);"
                                          id="userProfileImage">
 
                                     <!-- Camera button -->
@@ -101,7 +132,7 @@
 
 
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
                                         <i class="bi bi-person-gear me-1"></i>Settings
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
@@ -112,8 +143,8 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-
+                        
+                    </div>
                 </div>
         <!-- Success/Error Messages -->
         <div th:if="${success}" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
@@ -749,6 +780,9 @@
 
 
 </script>
+
+<chat-bot platform_id="873449d0-4854-4ee0-944b-0921aa9056c7" user_id="e683cbbe-817a-4f84-b55a-4bad3b5dbd82" chatbot_id="bfb568ae-9508-4c3f-8702-86d735fda231"><a href="https://www.chatsimple.ai/?utm_source=widget&utm_medium=referral">chatsimple</a></chat-bot><script src="https://cdn.chatsimple.ai/chat-bot-loader.js" defer></script>
+
 
 </body>
 </html>
