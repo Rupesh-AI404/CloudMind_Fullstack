@@ -29,7 +29,7 @@ public class SignupController {
     @PostMapping("/signup")
     public String signupPost(@ModelAttribute User user, Model model, HttpSession session) {
         if (userRepo.existsByEmail(user.getEmail())) {
-            model.addAttribute("error", "Email already exists!");
+            model.addAttribute("emailerror", "Email already exists!");
             return "signup";
         }
 

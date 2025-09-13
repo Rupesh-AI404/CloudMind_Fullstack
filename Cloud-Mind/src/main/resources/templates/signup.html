@@ -40,7 +40,9 @@
                         <h2 class="fw-bold mb-2">Create Account</h2>
                         <p class="text-muted">Start your digital marketing journey with Cloud Mind</p>
                     </div>
-                    <p th:if="${error}" class="text-danger text-center" th:text="${error}"></p>
+                    <p th:if="${emailerror}"
+                       class="text-danger error-styled"
+                       th:text="${emailerror}"></p>
                     <form class="auth-form" autocomplete="off" method="post" th:action="@{/signup}" id="signupForm">
                         <div class="row">
                             <div class="col-md-6 mb-4">

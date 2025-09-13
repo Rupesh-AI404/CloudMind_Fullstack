@@ -47,4 +47,6 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
 //    @Query("SELECT s FROM Subscriber s WHERE s.expiryDate < ?1")
 //    List<Subscriber> findByExpiryDateBefore(LocalDateTime date);
 
+
+
 }

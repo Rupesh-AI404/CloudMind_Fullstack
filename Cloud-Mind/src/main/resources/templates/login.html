@@ -53,7 +53,9 @@
 
                     <!-- Login Form -->
 
-                    <p th:if="${loginerror}" class="text-danger text-center" th:text="${loginerror}"></p>
+                    <p th:if="${loginerror}"
+                       class="text-danger error-styled"
+                       th:text="${loginerror}"></p>
                     <form id="loginForm" autocomplete="off" th:action="@{/login}" method="post">
                         <div class="mb-4">
                             <label for="loginEmail" class="form-label fw-medium">Email address</label>
